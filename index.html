@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MARITHÉ — Material List</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --bg:#f5f3ef;
+    --paper:#ffffff;
+    --ink:#111111;
+    --muted:#7a7a7a;
+    --line:#e6e3dc;
+    --accent:#111111;
+    --accent-soft:#1f1f1f;
+    --shadow:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Helvetica Neue",Arial,system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  button{font:inherit;cursor:pointer}
+  input,textarea{font:inherit}
+
+  /* HEADER */
+  header.brand-bar{
+    position:sticky;top:0;z-index:30;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(6px);
+  }
+  .bar-row{
+    max-width:1280px;margin:0 auto;padding:18px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .brand{
+    display:flex;align-items:baseline;gap:14px;
+  }
+  .brand .logo{
+    font-size:26px;font-weight:800;letter-spacing:.06em;
+  }
+  .brand .sub{
+    color:var(--muted);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+  .toolbar button{
+    background:var(--paper);color:var(--ink);
+    border:1px solid var(--line);
+    padding:10px 14px;border-radius:999px;
+    font-size:13px;font-weight:500;letter-spacing:.02em;
+    transition:all .15s ease;
+  }
+  .toolbar button:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .toolbar .primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .toolbar .primary:hover{background:#000}
+  .toolbar .danger:hover{background:#b22;border-color:#b22}
+
+  /* TABS */
+  nav.tabs{
+    max-width:1280px;margin:0 auto;padding:0 24px;
+    display:flex;gap:4px;overflow-x:auto;
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+    position:sticky;top:80px;z-index:20;
+  }
+  nav.tabs button{
+    background:transparent;border:none;
+    padding:14px 18px;font-size:13px;font-weight:600;
+    letter-spacing:.14em;color:var(--muted);
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+  }
+  nav.tabs button:hover{color:var(--ink)}
+  nav.tabs button.active{color:var(--ink);border-bottom-color:var(--ink)}
+  nav.tabs .count{
+    margin-left:6px;color:var(--muted);font-weight:400;font-size:11px;
+  }
+  nav.tabs button.active .count{color:var(--ink)}
+
+  /* SEARCH BAR */
+  .search-bar{
+    max-width:1280px;margin:0 auto;padding:18px 24px 0;
+    display:flex;align-items:center;gap:12px;
+  }
+  .search-bar input{
+    flex:1;max-width:420px;
+    padding:10px 14px;
+    border:1px solid var(--line);border-radius:999px;
+    background:var(--paper);
+    outline:none;font-size:13px;
+  }
+  .search-bar input:focus{border-color:var(--ink)}
+  .search-bar .info{color:var(--muted);font-size:12px}
+
+  /* GRID */
+  main.grid-wrap{max-width:1280px;margin:0 auto;padding:24px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    position:relative;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow);
+    border-color:#d8d4ca;
+  }
+  .img-wrap{
+    aspect-ratio:1/1;background:#f0ede6;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    cursor:zoom-in;
+  }
+  .img-wrap img{
+    width:100%;height:100%;object-fit:contain;
+    transition:transform .25s ease;
+  }
+  .card:hover .img-wrap img{transform:scale(1.03)}
+  .img-wrap .placeholder{color:var(--muted);font-size:12px}
+  .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .code{
+    font-size:11px;letter-spacing:.1em;font-weight:700;
+    color:var(--muted);text-transform:uppercase;
+    font-family:"SF Mono","Menlo",ui-monospace,monospace;
+  }
+  .name{font-size:14px;font-weight:600;line-height:1.4;color:var(--ink);word-break:break-word}
+  .price{font-size:12px;color:var(--muted);line-height:1.4;word-break:break-word}
+  .actions{
+    position:absolute;top:8px;right:8px;
+    display:flex;gap:6px;opacity:0;transition:opacity .15s ease;
+  }
+  .card:hover .actions{opacity:1}
+  .actions button{
+    width:30px;height:30px;border-radius:999px;
+    border:none;background:rgba(255,255,255,.92);
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;line-height:1;
+  }
+  .actions button:hover{background:var(--ink);color:var(--paper)}
+  .actions .del:hover{background:#c0392b}
+
+  .empty{
+    grid-column:1/-1;
+    text-align:center;padding:80px 20px;color:var(--muted);
+    border:2px dashed var(--line);border-radius:var(--radius);
+  }
+  .empty h3{margin:0 0 6px;font-weight:600;color:var(--ink)}
+
+  /* ADD TILE — always-visible "+" card at end of grid */
+  .add-tile{
+    background:var(--paper);
+    border:2px dashed #c9c4b9;
+    border-radius:var(--radius);
+    min-height:280px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    color:var(--muted);cursor:pointer;
+    transition:all .18s ease;
+  }
+  .add-tile:hover{
+    border-color:var(--ink);color:var(--ink);
+    background:#fafaf7;transform:translateY(-2px);
+  }
+  .add-tile .plus{
+    width:54px;height:54px;border-radius:999px;
+    border:1.5px solid currentColor;
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;font-weight:300;line-height:1;
+  }
+  .add-tile .label{font-size:13px;font-weight:600;letter-spacing:.06em}
+  .add-tile .hint{font-size:11px;color:var(--muted)}
+
+  /* FLOATING ACTION BUTTON */
+  .fab{
+    position:fixed;right:24px;bottom:24px;z-index:50;
+    width:60px;height:60px;border-radius:999px;
+    background:var(--ink);color:var(--paper);
+    border:none;font-size:28px;font-weight:300;line-height:1;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .fab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+  .fab::after{
+    content:'자재 추가';position:absolute;right:74px;
+    background:var(--ink);color:var(--paper);
+    font-size:12px;padding:6px 12px;border-radius:999px;
+    white-space:nowrap;opacity:0;pointer-events:none;
+    transition:opacity .15s ease;
+    font-weight:500;letter-spacing:.04em;
+  }
+  .fab:hover::after{opacity:1}
+
+  /* FOOTER */
+  footer{
+    max-width:1280px;margin:0 auto;padding:32px 24px 60px;
+    color:var(--muted);font-size:12px;text-align:center;border-top:1px solid var(--line);margin-top:24px;
+  }
+
+  /* MODAL */
+  .modal{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(20,20,20,.4);backdrop-filter:blur(2px);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .modal[hidden]{display:none}
+  .dialog{
+    background:var(--paper);border-radius:var(--radius);
+    width:min(520px,100%);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    animation:pop .15s ease;
+  }
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  .dialog header{
+    padding:18px 20px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .dialog header h2{margin:0;font-size:16px;font-weight:700}
+  .close{background:none;border:none;font-size:22px;color:var(--muted);line-height:1}
+  .close:hover{color:var(--ink)}
+  form.form{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+  .field label{display:block;font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-weight:600}
+  .field input{
+    width:100%;padding:10px 12px;
+    border:1px solid var(--line);border-radius:8px;
+    background:#fafaf7;outline:none;
+  }
+  .field input:focus{border-color:var(--ink);background:var(--paper)}
+  .img-pick{
+    border:2px dashed #d8d4ca;border-radius:12px;
+    padding:18px;text-align:center;background:#fafaf7;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    cursor:pointer;
+    transition:all .18s ease;
+  }
+  .img-pick:hover{border-color:var(--ink);background:#f3f0e8}
+  .img-pick.dragover{border-color:var(--ink);background:#eee9dd;transform:scale(1.01)}
+  .img-pick.has-image{padding:14px}
+  .img-pick img{max-width:240px;max-height:240px;object-fit:contain;border-radius:6px;background:var(--paper);padding:6px}
+  .img-pick .pick-btn{
+    display:inline-block;padding:9px 16px;border-radius:999px;
+    background:var(--ink);color:var(--paper);font-size:12px;font-weight:600;
+    letter-spacing:.04em;cursor:pointer;
+  }
+  .img-pick small{color:var(--muted);font-size:11px;line-height:1.4}
+  .img-pick .icon{
+    font-size:32px;color:#c9c4b9;line-height:1;
+  }
+  .img-pick .change{
+    font-size:11px;color:var(--muted);text-decoration:underline;
+  }
+  /* fields container that animates in once image is picked */
+  .fields-stack{
+    display:flex;flex-direction:column;gap:14px;
+    overflow:hidden;
+    max-height:0;opacity:0;
+    transition:max-height .35s ease, opacity .25s ease;
+  }
+  .fields-stack.show{
+    max-height:600px;opacity:1;
+  }
+  .form-actions{
+    display:flex;justify-content:flex-end;gap:8px;margin-top:6px;
+  }
+  .form-actions button{
+    padding:10px 16px;border-radius:999px;border:1px solid var(--line);
+    background:var(--paper);font-size:13px;
+  }
+  .form-actions button.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .form-actions button.primary:hover{background:#000}
+  .form-actions button:hover{background:#f0ede6}
+
+  /* LIGHTBOX */
+  .lightbox{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(0,0,0,.86);
+    display:flex;align-items:center;justify-content:center;
+    padding:30px;cursor:zoom-out;
+  }
+  .lightbox[hidden]{display:none}
+  .lightbox img{max-width:100%;max-height:100%;border-radius:6px}
+
+  /* TOAST */
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:var(--paper);
+    padding:10px 18px;border-radius:999px;font-size:13px;
+    box-shadow:var(--shadow);z-index:300;
+    opacity:0;transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+    .brand .logo{font-size:20px}
+    nav.tabs{top:74px}
+  }
+
+  /* ADMIN-ONLY ELEMENTS — hidden by default (viewer mode) */
+  [data-admin]{display:none !important}
+  body.is-admin [data-admin]{display:revert !important}
+  body.is-admin button[data-admin]{display:inline-flex !important}
+  body.is-admin .fab[data-admin]{display:flex !important}
+  body.is-admin .actions[data-admin],
+  body.is-admin .add-tile[data-admin],
+  body.is-admin .save-bar[data-admin]{display:flex !important}
+  /* VIEWER-ONLY (hidden when admin) */
+  body.is-admin [data-viewer]{display:none !important}
+  /* Admin badge */
+  .admin-badge{
+    align-self:center;
+    font-size:11px;letter-spacing:.1em;font-weight:700;
+    padding:6px 12px;border-radius:999px;
+    background:#fff5cc;color:#7a5c00;border:1px solid #f0e4a3;
+    text-transform:uppercase;
+  }
+  /* SAVE BAR */
+  .save-bar{
+    max-width:1280px;margin:14px auto 0;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:#fff8e1;
+    border:1px solid #f0e4a3;
+    border-radius:12px;
+    margin-left:24px;margin-right:24px;
+  }
+  @media(min-width:1328px){.save-bar{margin-left:auto;margin-right:auto}}
+  .save-bar-info{display:flex;align-items:center;gap:12px;color:#7a5c00;font-size:14px}
+  .save-bar-info strong{font-weight:700;letter-spacing:.04em}
+  .save-bar-status{font-size:12px;padding:3px 10px;border-radius:999px;background:#fff;color:#7a5c00;border:1px solid #f0e4a3}
+  .save-bar-status.dirty{background:#ffe082;color:#5a3c00;font-weight:600}
+  .save-bar-actions{display:flex;gap:8px}
+  .save-bar-actions button{
+    padding:9px 16px;border-radius:999px;
+    border:1px solid #d8c280;background:#fff;color:#7a5c00;
+    font-size:13px;font-weight:600;letter-spacing:.02em;
+    transition:all .15s ease;
+  }
+  .save-bar-actions button:hover{background:#7a5c00;color:#fff;border-color:#7a5c00}
+  .save-bar-actions button.primary{background:#7a5c00;color:#fff;border-color:#7a5c00}
+  .save-bar-actions button.primary:hover{background:#5a3c00}
+</style>
+</head>
+<body>
+
+<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@110)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@110)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@110)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@110)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고", "price": "", "images": ["assets/button_013.jpeg"]}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@250)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@250)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@250)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/metal_029.jpeg"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}]}</script>
+
+<header class="brand-bar">
+  <div class="bar-row">
+    <div class="brand">
+      <div class="logo">MARITHÉ FRANÇOIS GIRBAUD</div>
+      <div class="sub">Material List -SNS-</div>
+    </div>
+    <div class="toolbar">
+      <button id="btn-admin-enter" class="primary" data-viewer>🔒 관리자 모드</button>
+      <button id="btn-add" class="primary" data-admin>＋ 자재 추가</button>
+      <button id="btn-token" data-admin title="GitHub 토큰 설정/변경">🔑 GitHub 토큰</button>
+      <button id="btn-save-file" data-admin title="현재 내용을 HTML 파일로 백업 다운로드 (GitHub 동기화와 별개)">💾 백업 다운로드</button>
+      <button id="btn-print">🖨 인쇄</button>
+      <button id="btn-pdf">📄 PDF 저장</button>
+      <button id="btn-excel">📊 엑셀 저장</button>
+      <span class="admin-badge" data-admin>관리자 모드</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<div class="search-bar">
+  <input id="search" type="search" placeholder="검색 — 코드, 이름, 가격…" />
+  <span class="info" id="info"></span>
+</div>
+
+<div class="save-bar" data-admin>
+  <div class="save-bar-info">
+    <strong>💾 <span id="save-cat-name">BUTTON</span></strong>
+    <span class="save-bar-status" id="save-bar-status">저장된 상태</span>
+  </div>
+  <div class="save-bar-actions">
+    <button id="btn-save-cat" class="primary">저장</button>
+    <button id="btn-save-exit">저장 후 나가기</button>
+  </div>
+</div>
+
+<main class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div>MARITHÉ · 자재 카탈로그 — ㈜ 에스엔에스 SUPPLY&amp;SUPPORT</div>
+  <div style="margin-top:6px">서울시 종로구 효제동 167 · 서울시 중구 청계천로 260-6 · sns@sns.ne.kr</div>
+</footer>
+
+<!-- EDIT / ADD MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="dialog" role="dialog" aria-modal="true">
+    <header>
+      <h2 id="modal-title">자재 편집</h2>
+      <button class="close" id="modal-close" aria-label="close">&times;</button>
+    </header>
+    <form class="form" id="form">
+      <div class="field">
+        <label>1. 이미지</label>
+        <div class="img-pick" id="img-pick">
+          <img id="img-preview" alt="" hidden />
+          <div id="img-empty" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div class="icon">＋</div>
+            <small><b>클릭</b>하거나 <b>이미지 끌어다 놓기</b></small>
+          </div>
+          <span class="pick-btn" id="img-pick-btn" hidden>이미지 변경</span>
+          <input id="img-input" type="file" accept="image/*" hidden />
+        </div>
+      </div>
+      <div class="fields-stack" id="fields-stack">
+        <div class="field">
+          <label>2. 아이템 넘버 (코드)</label>
+          <input name="code" autocomplete="off" placeholder="예) MA-SLW-11" />
+        </div>
+        <div class="field">
+          <label>3. 이름</label>
+          <input name="name" autocomplete="off" placeholder="예) 11.5MM (T/R 테 + LOGO)" />
+        </div>
+        <div class="field">
+          <label>4. 가격 / 스펙</label>
+          <input name="price" autocomplete="off" placeholder="예) (@110)" />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" id="form-cancel">취소</button>
+        <button type="submit" class="primary">저장</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<button class="fab" id="fab" title="자재 추가" aria-label="자재 추가" data-admin>＋</button>
+
+<div class="lightbox" id="lightbox" hidden><img id="lightbox-img" alt="" /></div>
+<div class="toast" id="toast"></div>
+
+
+<script>
+/* ====== ADMIN ACCESS ======
+   본인만 편집 가능, 다른 사람들은 보기만 가능.
+   편집 모드로 들어가려면: 파일 URL 끝에 ?admin=비밀번호 붙이기
+   예) Marithe_Material_List.html?admin=marithe2026
+   한 번 들어가면 같은 브라우저에선 계속 관리자 모드 유지됨 (로그아웃 누르기 전까지).
+   주의: 클라이언트 잠금이라 HTML 소스 보면 비밀번호 노출됨.
+        진짜 보안이 필요하면 백엔드 호스팅 필요. */
+const ADMIN_KEY = "whdyddnjs1";   // ← 본인이 원하는 비밀번호로 바꾸세요
+const ADMIN_FLAG = "marithe_admin_v1";
+
+// 한글 IME로 잘못 입력된 비밀번호도 영문 키 입력으로 변환해서 인식
+// (예: 한글 입력 모드로 "whdyddnjs1" 치면 자모가 합쳐져서 한글 음절이 되는데, 그걸 다시 영문 키로 환산)
+function hangulToEng(text){
+  const INI = ['r','R','s','e','E','f','a','q','Q','t','T','d','w','W','c','z','x','v','g'];
+  const MED = ['k','o','i','O','j','p','u','P','h','hk','ho','hl','y','n','nj','np','nl','b','m','ml','l'];
+  const FIN = ['','r','R','rt','s','sw','sg','e','f','fr','fa','fq','ft','fx','fv','fg','a','q','qt','t','T','d','w','c','z','x','v','g'];
+  let out = '';
+  for(const ch of text){
+    const code = ch.charCodeAt(0);
+    if(code >= 0xAC00 && code <= 0xD7A3){
+      const idx = code - 0xAC00;
+      const i = Math.floor(idx / (21*28));
+      const m = Math.floor((idx % (21*28)) / 28);
+      const f = idx % 28;
+      out += INI[i] + MED[m] + FIN[f];
+    } else if(code >= 0x3131 && code <= 0x3163){
+      // 자모 단독 (ㄱㄴㄷ...): conservative pass-through; rarely needed
+      out += ch;
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+function checkAdminPassword(input){
+  if(input === ADMIN_KEY) return true;
+  if(hangulToEng(input) === ADMIN_KEY) return true;
+  return false;
+}
+
+(function initAdminMode(){
+  try{
+    const params = new URLSearchParams(location.search);
+    if(params.has('admin')){
+      if(checkAdminPassword(params.get('admin'))){
+        localStorage.setItem(ADMIN_FLAG, '1');
+      }else{
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
+    if(params.has('logout')){
+      localStorage.removeItem(ADMIN_FLAG);
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
+  }catch(e){}
+})();
+
+const IS_ADMIN = localStorage.getItem(ADMIN_FLAG) === '1';
+if(IS_ADMIN) document.body.classList.add('is-admin');
+
+/* ====== GITHUB SYNC CONFIG ======
+   본인이 수정 → GitHub에 push → 모든 사람이 새로고침 시 최신본 봄.
+   repo: github.com/kihoon-0525/marithe-materials
+   data.json 만 push (이미지 추가하면 그 안에 base64로 박힘).
+   PAT는 admin 모드에서 처음 저장 시 한 번 입력 → 같은 브라우저면 계속 사용. */
+const GITHUB_OWNER = 'kihoon-0525';
+const GITHUB_REPO = 'marithe-materials';
+const GITHUB_BRANCH = 'main';
+const GITHUB_DATA_PATH = 'data.json';
+const PAT_KEY = 'marithe_github_pat_v1';
+const DATA_URL = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_DATA_PATH}`;
+
+/* ====== INITIAL DATA — 오프라인/fetch 실패 시 fallback ====== */
+const INITIAL_DATA_FALLBACK = JSON.parse(document.getElementById('initial-data').textContent);
+
+/* ====== STATE ====== */
+const STORAGE_KEY = 'marithe_material_v1';
+let CATEGORIES = Object.keys(INITIAL_DATA_FALLBACK);
+let state = JSON.parse(JSON.stringify(INITIAL_DATA_FALLBACK)); // 초기값, 곧 덮어씀
+let currentTab = CATEGORIES[0];
+let editingIndex = -1; // -1 = adding new
+let pendingImageDataUrl = null; // when user picks new image in modal
+
+/* GitHub raw에서 최신 data.json 가져오기. 실패 시 fallback 반환. */
+async function fetchRemoteData(){
+  try{
+    const r = await fetch(`${DATA_URL}?t=${Date.now()}`, {cache: 'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    return data;
+  }catch(e){
+    console.warn('remote data fetch 실패, fallback 사용', e);
+    return JSON.parse(JSON.stringify(INITIAL_DATA_FALLBACK));
+  }
+}
+
+function loadLocalState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const obj = JSON.parse(raw);
+      for(const c of CATEGORIES) if(!obj[c]) obj[c] = [];
+      return obj;
+    }
+  }catch(e){console.warn('local load failed', e)}
+  return null;
+}
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setDirty(true);
+  }catch(e){
+    toast('저장 용량 초과 — HTML 저장 후 다시 시도');
+    console.warn(e);
+  }
+}
+
+/* ====== GITHUB AUTO-PUSH ====== */
+function getPAT(){ return localStorage.getItem(PAT_KEY) || ''; }
+function setPAT(v){ localStorage.setItem(PAT_KEY, v); }
+function clearPAT(){ localStorage.removeItem(PAT_KEY); }
+
+function promptPAT(){
+  const cur = getPAT();
+  const msg =
+`GitHub Personal Access Token을 입력하세요.
+
+발급 경로:
+  github.com → 우측 상단 프로필 → Settings
+  → Developer settings (제일 아래)
+  → Personal access tokens → Fine-grained tokens
+  → "Generate new token"
+  → Repository access: Only select repositories → ${GITHUB_OWNER}/${GITHUB_REPO}
+  → Permissions → Repository permissions → Contents: Read and write
+  → 생성된 토큰(ghp_... 또는 github_pat_...) 복사해서 아래에 붙여넣기
+
+(한 번만 입력하면 이 브라우저에서 계속 사용됨)`;
+  const v = prompt(msg, cur);
+  if(v == null) return null;
+  const trimmed = v.trim();
+  if(!trimmed){ clearPAT(); return ''; }
+  setPAT(trimmed);
+  return trimmed;
+}
+
+/* GitHub Contents API로 data.json 덮어쓰기 */
+async function pushToGithub(){
+  let token = getPAT();
+  if(!token){ token = promptPAT(); if(!token) throw new Error('PAT 입력 취소'); }
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
+
+  // 현재 파일의 sha 가져오기 (있어야 덮어쓰기 가능)
+  let sha = null;
+  const getRes = await fetch(`${apiUrl}?ref=${GITHUB_BRANCH}`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+  });
+  if(getRes.status === 401 || getRes.status === 403){
+    throw new Error('GitHub 토큰이 잘못됐거나 권한 부족. 토큰 재설정 필요.');
+  }
+  if(getRes.ok){
+    const cur = await getRes.json();
+    sha = cur.sha;
+  } else if(getRes.status !== 404){
+    throw new Error(`GitHub 조회 실패: ${getRes.status}`);
+  }
+
+  // UTF-8 안전 base64 인코딩
+  const jsonStr = JSON.stringify(state, null, 2);
+  const bytes = new TextEncoder().encode(jsonStr);
+  let bin = ''; for(const b of bytes) bin += String.fromCharCode(b);
+  const content = btoa(bin);
+
+  const body = {
+    message: `Update ${GITHUB_DATA_PATH} — ${new Date().toLocaleString('ko-KR')}`,
+    content,
+    branch: GITHUB_BRANCH,
+  };
+  if(sha) body.sha = sha;
+
+  const putRes = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/vnd.github+json',
+    },
+    body: JSON.stringify(body),
+  });
+  if(!putRes.ok){
+    const err = await putRes.text();
+    throw new Error(`GitHub 업로드 실패 (${putRes.status}): ${err.slice(0,200)}`);
+  }
+  return await putRes.json();
+}
+
+async function pushWithFeedback(){
+  if(!IS_ADMIN) return false;
+  toast('GitHub에 업로드 중…');
+  try{
+    await pushToGithub();
+    setDirty(false);
+    toast('✅ GitHub 동기화 완료 — 모든 사람이 새로고침하면 최신본');
+    return true;
+  }catch(e){
+    console.error(e);
+    toast('❌ ' + e.message);
+    return false;
+  }
+}
+
+let dirty = false;
+function setDirty(v){
+  dirty = v;
+  const status = document.getElementById('save-bar-status');
+  if(status){
+    if(v){
+      status.textContent = '변경됨 — 저장 필요';
+      status.classList.add('dirty');
+    }else{
+      status.textContent = '저장된 상태';
+      status.classList.remove('dirty');
+    }
+  }
+}
+window.addEventListener('beforeunload', e => {
+  if(IS_ADMIN && dirty){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+function saveAsHtml(){
+  if(!IS_ADMIN) return;
+  // Update the embedded JSON with current state
+  const dataEl = document.getElementById('initial-data');
+  const prevText = dataEl.textContent;
+  dataEl.textContent = JSON.stringify(state);
+
+  // Strip admin-only DOM state so recipients open in viewer mode
+  const wasAdmin = document.body.classList.contains('is-admin');
+  document.body.classList.remove('is-admin');
+
+  const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+
+  // Restore live page state
+  if(wasAdmin) document.body.classList.add('is-admin');
+  dataEl.textContent = prevText;
+
+  // Trigger download
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ts = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  a.href = url;
+  a.download = `Marithe_Material_List_${ts}.html`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+
+  setDirty(false);
+  toast('HTML 파일 저장 완료 — 다운로드 폴더 확인');
+}
+
+/* ====== RENDER ====== */
+const $ = sel => document.querySelector(sel);
+const tabsEl = $('#tabs');
+const gridEl = $('#grid');
+const infoEl = $('#info');
+const searchEl = $('#search');
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  for(const cat of CATEGORIES){
+    const b = document.createElement('button');
+    b.textContent = cat;
+    b.dataset.tab = cat;
+    if(cat === currentTab) b.classList.add('active');
+    const cnt = document.createElement('span');
+    cnt.className = 'count';
+    cnt.textContent = `(${state[cat].length})`;
+    b.appendChild(cnt);
+    b.addEventListener('click', () => { currentTab = cat; renderTabs(); renderGrid(); updateSaveBar(); });
+    tabsEl.appendChild(b);
+  }
+}
+
+function updateSaveBar(){
+  const nameEl = document.getElementById('save-cat-name');
+  if(nameEl) nameEl.textContent = currentTab;
+}
+
+function renderGrid(){
+  gridEl.innerHTML = '';
+  const items = state[currentTab] || [];
+  const q = (searchEl.value || '').trim().toLowerCase();
+  const filtered = !q ? items : items.filter(it =>
+    (it.code||'').toLowerCase().includes(q) ||
+    (it.name||'').toLowerCase().includes(q) ||
+    (it.price||'').toLowerCase().includes(q)
+  );
+  infoEl.textContent = q ? `${filtered.length} / ${items.length}건` : `${items.length}건`;
+
+  if(filtered.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.innerHTML = q
+      ? `<h3>검색 결과가 없어요</h3><p>'${escapeHtml(q)}'에 해당하는 자재를 찾을 수 없습니다.</p>`
+      : `<h3>아직 등록된 자재가 없어요</h3><p>우측 상단 <b>＋ 자재 추가</b> 버튼으로 등록하세요.</p>`;
+    gridEl.appendChild(empty);
+    return;
+  }
+
+  for(const it of filtered){
+    const realIndex = items.indexOf(it);
+    gridEl.appendChild(buildCard(it, realIndex));
+  }
+
+  // Always show "+ 새 자재" tile at the end (admin only, not while searching)
+  if(IS_ADMIN && !q){
+    const tile = document.createElement('div');
+    tile.className = 'add-tile';
+    tile.setAttribute('data-admin','');
+    tile.innerHTML = `
+      <div class="plus">＋</div>
+      <div class="label">새 자재 추가</div>
+      <div class="hint">${currentTab}</div>
+    `;
+    tile.addEventListener('click', openAdd);
+    gridEl.appendChild(tile);
+  }
+}
+
+function buildCard(item, index){
+  const card = document.createElement('div');
+  card.className = 'card';
+  const imgWrap = document.createElement('div');
+  imgWrap.className = 'img-wrap';
+  if(item.images && item.images[0]){
+    const img = document.createElement('img');
+    img.src = item.images[0];
+    img.alt = item.code || item.name || '';
+    img.loading = 'lazy';
+    img.addEventListener('error', () => {
+      img.remove();
+      const ph = document.createElement('div');
+      ph.className = 'placeholder';
+      ph.textContent = '이미지를 불러올 수 없어요';
+      imgWrap.appendChild(ph);
+    });
+    imgWrap.addEventListener('click', () => openLightbox(img.src));
+    imgWrap.appendChild(img);
+  }else{
+    const ph = document.createElement('div');
+    ph.className = 'placeholder';
+    ph.textContent = '이미지 없음';
+    imgWrap.appendChild(ph);
+  }
+  const body = document.createElement('div');
+  body.className = 'body';
+  if(item.code){
+    const c = document.createElement('div');
+    c.className = 'code';
+    c.textContent = item.code;
+    body.appendChild(c);
+  }
+  if(item.name){
+    const n = document.createElement('div');
+    n.className = 'name';
+    n.textContent = item.name;
+    body.appendChild(n);
+  }
+  if(item.price){
+    const p = document.createElement('div');
+    p.className = 'price';
+    p.textContent = item.price;
+    body.appendChild(p);
+  }
+  if(!item.code && !item.name && !item.price){
+    const n = document.createElement('div');
+    n.className = 'name';
+    n.style.color = 'var(--muted)';
+    n.textContent = '(이름 미지정)';
+    body.appendChild(n);
+  }
+
+  card.appendChild(imgWrap);
+  card.appendChild(body);
+
+  if(IS_ADMIN){
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.setAttribute('data-admin','');
+    const btnEdit = document.createElement('button');
+    btnEdit.title = '편집';
+    btnEdit.innerHTML = '✎';
+    btnEdit.addEventListener('click', e => { e.stopPropagation(); openEdit(index); });
+    const btnDel = document.createElement('button');
+    btnDel.className = 'del';
+    btnDel.title = '삭제';
+    btnDel.innerHTML = '🗑';
+    btnDel.addEventListener('click', e => { e.stopPropagation(); removeItem(index); });
+    actions.appendChild(btnEdit);
+    actions.appendChild(btnDel);
+    card.appendChild(actions);
+  }
+  return card;
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ====== ADD / EDIT MODAL ====== */
+const modal = $('#modal');
+const form = $('#form');
+const imgInput = $('#img-input');
+const imgPreview = $('#img-preview');
+const imgEmpty = $('#img-empty');
+const imgPick = $('#img-pick');
+const imgPickBtn = $('#img-pick-btn');
+const fieldsStack = $('#fields-stack');
+
+function openAdd(){
+  if(!IS_ADMIN) return;
+  editingIndex = -1;
+  pendingImageDataUrl = null;
+  $('#modal-title').textContent = `${currentTab} — 새 자재 추가`;
+  form.reset();
+  setPreview(null);
+  modal.hidden = false;
+}
+
+function openEdit(idx){
+  if(!IS_ADMIN) return;
+  const it = state[currentTab][idx];
+  editingIndex = idx;
+  pendingImageDataUrl = null;
+  $('#modal-title').textContent = `${currentTab} — 자재 편집`;
+  form.elements['code'].value = it.code || '';
+  form.elements['name'].value = it.name || '';
+  form.elements['price'].value = it.price || '';
+  setPreview(it.images && it.images[0] || null);
+  // Always show fields when editing existing item
+  fieldsStack.classList.add('show');
+  modal.hidden = false;
+}
+
+function closeModal(){
+  modal.hidden = true;
+}
+
+function setPreview(src){
+  if(src){
+    imgPreview.src = src;
+    imgPreview.hidden = false;
+    imgEmpty.style.display = 'none';
+    imgPickBtn.hidden = false;
+    imgPick.classList.add('has-image');
+    fieldsStack.classList.add('show');
+  }else{
+    imgPreview.removeAttribute('src');
+    imgPreview.hidden = true;
+    imgEmpty.style.display = 'flex';
+    imgPickBtn.hidden = true;
+    imgPick.classList.remove('has-image');
+    // Still show fields so editing works without image required
+    fieldsStack.classList.remove('show');
+  }
+}
+
+function loadImageFile(file){
+  if(!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingImageDataUrl = ev.target.result;
+    setPreview(pendingImageDataUrl);
+    // After image loads, focus the code field (auto flow)
+    setTimeout(()=>{
+      const codeInput = form.elements['code'];
+      if(codeInput && !codeInput.value) codeInput.focus();
+    }, 350);
+  };
+  reader.readAsDataURL(file);
+}
+
+imgInput.addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  if(file) loadImageFile(file);
+  e.target.value = '';
+});
+
+// Click anywhere in the picker area opens file dialog
+imgPick.addEventListener('click', () => imgInput.click());
+
+// Drag & drop
+['dragenter','dragover'].forEach(ev =>
+  imgPick.addEventListener(ev, e => { e.preventDefault(); imgPick.classList.add('dragover'); })
+);
+['dragleave','drop'].forEach(ev =>
+  imgPick.addEventListener(ev, e => { e.preventDefault(); imgPick.classList.remove('dragover'); })
+);
+imgPick.addEventListener('drop', e => {
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if(file) loadImageFile(file);
+});
+
+// Paste image directly
+modal.addEventListener('paste', e => {
+  if(modal.hidden) return;
+  const item = [...(e.clipboardData?.items || [])].find(it => it.type.startsWith('image/'));
+  if(item){
+    const file = item.getAsFile();
+    if(file) loadImageFile(file);
+  }
+});
+
+// Enter on form fields → jump to next field, Enter on last → submit
+form.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && e.target.tagName === 'INPUT'){
+    e.preventDefault();
+    const inputs = [...form.querySelectorAll('input[name]')];
+    const i = inputs.indexOf(e.target);
+    if(i >= 0 && i < inputs.length - 1){
+      inputs[i+1].focus();
+    }else{
+      form.requestSubmit();
+    }
+  }
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(form);
+  const data = {
+    code: (fd.get('code')||'').toString().trim(),
+    name: (fd.get('name')||'').toString().trim(),
+    price: (fd.get('price')||'').toString().trim(),
+  };
+  if(editingIndex < 0){
+    // Add new
+    const item = { ...data, images: pendingImageDataUrl ? [pendingImageDataUrl] : [] };
+    state[currentTab].push(item);
+  }else{
+    const it = state[currentTab][editingIndex];
+    Object.assign(it, data);
+    if(pendingImageDataUrl){
+      it.images = [pendingImageDataUrl];
+    }else if(imgPreview.hidden){
+      it.images = [];
+    }
+  }
+  saveState();
+  renderTabs();
+  renderGrid();
+  closeModal();
+  toast(editingIndex < 0 ? '추가되었습니다' : '저장되었습니다');
+});
+
+$('#modal-close').addEventListener('click', closeModal);
+$('#form-cancel').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+
+/* ====== DELETE ====== */
+function removeItem(idx){
+  if(!IS_ADMIN) return;
+  const it = state[currentTab][idx];
+  const label = it.code || it.name || '(이름 없음)';
+  if(!confirm(`'${label}' 항목을 삭제할까요?`)) return;
+  state[currentTab].splice(idx, 1);
+  saveState();
+  renderTabs();
+  renderGrid();
+  toast('삭제되었습니다');
+}
+
+/* ====== TOOLBAR ====== */
+$('#btn-add').addEventListener('click', openAdd);
+$('#fab').addEventListener('click', openAdd);
+
+// Enter admin mode (viewer mode → admin)
+$('#btn-admin-enter').addEventListener('click', () => {
+  const pw = prompt('관리자 비밀번호:');
+  if(pw == null) return;
+  if(checkAdminPassword(pw)){
+    localStorage.setItem(ADMIN_FLAG, '1');
+    location.reload();
+  }else{
+    alert('비밀번호가 일치하지 않습니다.');
+  }
+});
+
+// Yellow-bar 저장: localStorage 백업 + GitHub에 push
+$('#btn-save-cat').addEventListener('click', async () => {
+  saveState();
+  const ok = await pushWithFeedback();
+  if(!ok) toast('로컬에는 저장됨 — 다시 시도 또는 백업 다운로드 권장');
+});
+
+// Yellow-bar 저장 후 나가기: localStorage + GitHub push + admin 종료
+$('#btn-save-exit').addEventListener('click', async () => {
+  if(!confirm('저장 후 관리자 모드를 종료합니다. 진행할까요?')) return;
+  saveState();
+  const ok = await pushWithFeedback();
+  if(!ok){
+    if(!confirm('GitHub 동기화 실패. 그래도 관리자 모드 종료할까요?\n(로컬 변경사항은 다음 진입 시 복구 옵션 나옴)')) return;
+  }
+  setTimeout(() => {
+    localStorage.removeItem(ADMIN_FLAG);
+    location.reload();
+  }, 400);
+});
+
+// Toolbar 「💾 백업 다운로드」: 현재 state가 박힌 HTML을 로컬로 다운받기 (안전망)
+$('#btn-save-file').addEventListener('click', () => {
+  saveAsHtml();
+});
+
+// Toolbar 「🔑 GitHub 토큰」: PAT 설정/변경/삭제
+$('#btn-token').addEventListener('click', () => {
+  const cur = getPAT();
+  const status = cur ? `현재 등록된 토큰: ${cur.slice(0,8)}…${cur.slice(-4)}` : '⚠️ 등록된 토큰 없음';
+  const action = prompt(
+    `${status}\n\n` +
+    `[설정] 빈칸이면 새로 입력하라는 창 뜸\n` +
+    `[삭제] "delete" 입력 후 확인\n` +
+    `[취소] 취소 누르기`
+  );
+  if(action == null) return;
+  if(action.trim().toLowerCase() === 'delete'){
+    clearPAT();
+    toast('GitHub 토큰 삭제됨');
+    return;
+  }
+  promptPAT();
+  if(getPAT()) toast('GitHub 토큰 저장됨');
+});
+
+// Print
+$('#btn-print').addEventListener('click', () => {
+  toast('인쇄 창에서 프린터를 선택하세요');
+  setTimeout(() => window.print(), 300);
+});
+
+// PDF — same browser print dialog; user selects "PDF로 저장"
+$('#btn-pdf').addEventListener('click', () => {
+  toast('인쇄 창에서 "PDF로 저장" 선택하세요');
+  setTimeout(() => window.print(), 300);
+});
+
+// Excel export (XLSX via SheetJS)
+$('#btn-excel').addEventListener('click', () => {
+  if(typeof XLSX === 'undefined'){
+    alert('엑셀 저장 기능을 사용하려면 인터넷 연결이 필요합니다.');
+    return;
+  }
+  const wb = XLSX.utils.book_new();
+  for(const cat of CATEGORIES){
+    const rows = (state[cat] || []).map((it, i) => ({
+      'No.': i + 1,
+      '코드': it.code || '',
+      '이름': it.name || '',
+      '가격 / 스펙': it.price || '',
+      '이미지 수': (it.images || []).length,
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows.length ? rows : [{'No.':'', '코드':'', '이름':'', '가격 / 스펙':'', '이미지 수':''}]);
+    // Auto-fit-ish column widths
+    ws['!cols'] = [
+      { wch: 5 }, { wch: 22 }, { wch: 40 }, { wch: 28 }, { wch: 8 },
+    ];
+    // Sheet name max 31 chars, no special chars
+    const safe = cat.replace(/[\\\/\?\*\[\]:]/g,'_').slice(0,31);
+    XLSX.utils.book_append_sheet(wb, ws, safe);
+  }
+  const ts = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  XLSX.writeFile(wb, `Marithe_Materials_${ts}.xlsx`);
+  toast('엑셀 파일 저장 완료');
+});
+
+/* ====== SEARCH ====== */
+searchEl.addEventListener('input', renderGrid);
+
+/* ====== LIGHTBOX ====== */
+const lightbox = $('#lightbox');
+const lightboxImg = $('#lightbox-img');
+function openLightbox(src){
+  lightboxImg.src = src;
+  lightbox.hidden = false;
+}
+lightbox.addEventListener('click', () => { lightbox.hidden = true; lightboxImg.removeAttribute('src'); });
+
+/* ====== TOAST ====== */
+let toastTimer;
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 1800);
+}
+
+/* ====== KEYBOARD ====== */
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(!lightbox.hidden){ lightbox.hidden = true; lightboxImg.removeAttribute('src'); }
+    else if(!modal.hidden){ closeModal(); }
+  }
+});
+
+/* ====== INIT ====== */
+async function init(){
+  // viewer / admin 모두 GitHub raw에서 최신 data 가져옴
+  // admin이라도 항상 최신을 fetch (다른 디바이스에서 수정했을 수 있으니)
+  toast('데이터 불러오는 중…');
+  const remote = await fetchRemoteData();
+  state = remote;
+  CATEGORIES = Object.keys(state);
+  currentTab = CATEGORIES[0];
+
+  // admin이면서 localStorage에 dirty 백업이 있으면 복구 옵션 제공
+  if(IS_ADMIN){
+    const cached = loadLocalState();
+    const cachedStr = cached ? JSON.stringify(cached) : '';
+    const remoteStr = JSON.stringify(remote);
+    if(cached && cachedStr !== remoteStr){
+      const useLocal = confirm(
+        '⚠️ 저장 안 된 로컬 변경사항이 있어요.\n\n' +
+        '확인 → 로컬 변경사항으로 작업 계속 (GitHub에 아직 안 올라간 수정 복구)\n' +
+        '취소 → GitHub 최신본 사용 (로컬 변경사항 버림)'
+      );
+      if(useLocal){
+        state = cached;
+        CATEGORIES = Object.keys(state);
+        currentTab = CATEGORIES[0];
+        setDirty(true);
+      }else{
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  }
+
+  renderTabs();
+  renderGrid();
+  updateSaveBar();
+}
+init();
+</script>
+</body>
+</html>
