@@ -437,7 +437,7 @@
         </div>
         <div class="field">
           <label>4. 가격 / 스펙</label>
-          <input name="price" autocomplete="off" placeholder="예) (@110)" />
+          <input name="price" autocomplete="off" placeholder="숫자만 입력하면 (@숫자) 자동 / 예) 145 → (@145)" />
         </div>
       </div>
       <div class="form-actions">
@@ -984,13 +984,23 @@ form.addEventListener('keydown', e => {
   }
 });
 
+// 가격칸에 숫자만 입력하면 (@숫자) 형태로 자동 변환.
+// 예) "145" / "@145" / "145원" -> "(@145)"
+// 글자/치수 등이 섞여 있으면(예 "60MM*35MM", "검정 @280 칼라 @400") 입력 그대로 둠.
+function formatPrice(raw){
+  const s = (raw||'').toString().trim();
+  if(!s) return '';
+  const m = s.match(/^@?\s*(\d+)\s*원?$/);
+  return m ? '(@'+m[1]+')' : s;
+}
+
 form.addEventListener('submit', e => {
   e.preventDefault();
   const fd = new FormData(form);
   const data = {
     code: (fd.get('code')||'').toString().trim(),
     name: (fd.get('name')||'').toString().trim(),
-    price: (fd.get('price')||'').toString().trim(),
+    price: formatPrice(fd.get('price')),
   };
   if(editingIndex < 0){
     // Add new
