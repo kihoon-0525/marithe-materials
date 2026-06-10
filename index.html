@@ -298,8 +298,10 @@
   /* PRICE TABLE CARD + MODAL */
   .img-wrap.table-thumb{cursor:pointer;background:linear-gradient(135deg,#f3f5ee,#e7eedd)}
   .table-ph{display:flex;flex-direction:column;align-items:center;gap:8px}
-  .table-ph .tt-icon{font-size:34px;line-height:1}
-  .table-ph .tt-label{font-size:13px;font-weight:700;color:#5a6b4a}
+  .table-ph .tt-label{
+    font-size:15px;font-weight:800;letter-spacing:.12em;
+    color:#5a6b4a;text-align:center;
+  }
   .table-btn{
     margin-top:4px;align-self:flex-start;
     border:1px solid var(--line);background:var(--paper);border-radius:8px;
@@ -861,7 +863,7 @@ function buildCard(item, index){
     imgWrap.classList.add('table-thumb');
     const ph = document.createElement('div');
     ph.className = 'placeholder table-ph';
-    ph.innerHTML = '<div class="tt-icon">🎀</div><div class="tt-label">규격별 단가표</div>';
+    ph.innerHTML = '<div class="tt-label">MARITHE _sns</div>';
     imgWrap.appendChild(ph);
     imgWrap.addEventListener('click', () => openTableModal(item));
   }else{
