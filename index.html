@@ -295,6 +295,47 @@
   .lightbox[hidden]{display:none}
   .lightbox img{max-width:100%;max-height:100%;border-radius:6px}
 
+  /* PRICE TABLE CARD + MODAL */
+  .img-wrap.table-thumb{cursor:pointer;background:linear-gradient(135deg,#f3f5ee,#e7eedd)}
+  .table-ph{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .table-ph .tt-icon{font-size:34px;line-height:1}
+  .table-ph .tt-label{font-size:13px;font-weight:700;color:#5a6b4a}
+  .table-btn{
+    margin-top:4px;align-self:flex-start;
+    border:1px solid var(--line);background:var(--paper);border-radius:8px;
+    padding:7px 13px;font-size:12px;font-weight:700;color:var(--ink);
+    cursor:pointer;transition:background .15s ease, border-color .15s ease;
+  }
+  .table-btn:hover{background:#eef2e6;border-color:#cfd8bf}
+  .table-modal{
+    position:fixed;inset:0;z-index:210;
+    background:rgba(0,0,0,.6);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .table-modal[hidden]{display:none}
+  .table-panel{
+    background:var(--paper);border-radius:14px;
+    max-width:540px;width:100%;max-height:86vh;
+    display:flex;flex-direction:column;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.32);
+  }
+  .table-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 20px;border-bottom:1px solid var(--line);
+  }
+  .table-head h3{margin:0;font-size:16px;font-weight:700;color:var(--ink)}
+  .table-head button{
+    border:none;background:none;font-size:18px;cursor:pointer;
+    color:var(--muted);padding:4px 10px;border-radius:8px;line-height:1;
+  }
+  .table-head button:hover{background:var(--line);color:var(--ink)}
+  .table-scroll{overflow:auto}
+  table.ptable{border-collapse:collapse;width:100%;font-size:13px}
+  table.ptable th, table.ptable td{padding:10px 14px;text-align:center;border-bottom:1px solid var(--line)}
+  table.ptable thead th{position:sticky;top:0;background:#eef2e6;font-weight:700;color:var(--ink);z-index:1}
+  table.ptable td:first-child{font-weight:700;background:#faf9f5}
+  table.ptable tbody tr:hover td{background:#f4f6ee}
+
   /* TOAST */
   .toast{
     position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
@@ -358,7 +399,7 @@
 </head>
 <body>
 
-<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@110)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@110)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@110)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@110)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고", "price": "", "images": ["assets/button_013.jpeg"]}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@250)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@250)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@250)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/metal_029.jpeg"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}]}</script>
+<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@110)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@110)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@110)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@110)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고", "price": "", "images": ["assets/button_013.jpeg"]}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@250)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@250)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@250)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/metal_029.jpeg"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}, {"code":"","name":"직기 이중직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","138","165"],["25","160","210"],["30","180","210"],["32","188","218"],["35","205","235"],["38","210","248"],["40","225","263"],["45","263","293"],["50","293","323"],["55","338","375"],["62","390","428"],["70","420","465"]]}}, {"code":"","name":"코메즈 이중직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","150","165"],["22","180","195"],["25","180","210"],["28","195","225"],["30","195","240"],["32","210","255"],["35","225","270"],["38","255","285"],["40","270","300"],["42","300","330"],["45","300","330"],["47","330","375"],["50","330","375"],["53","375","420"],["55","375","420"],["57","405","450"],["60","405","450"],["63","450","495"],["66","450","525"],["70","525","570"]]}}, {"code":"","name":"코메즈 중간직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","105","120"],["22","120","135"],["25","120","150"],["28","150","165"],["30","150","165"],["32","165","180"],["35","165","195"],["38","180","210"],["40","195","225"],["42","210","255"],["45","210","255"],["47","230","285"],["50","240","285"],["53","270","300"],["55","270","300"],["57","285","315"],["60","285","315"],["63","315","345"],["66","315","360"],["70","420","450"]]}}]}</script>
 
 <header class="brand-bar">
   <div class="bar-row">
@@ -451,6 +492,15 @@
 <button class="fab" id="fab" title="자재 추가" aria-label="자재 추가" data-admin>＋</button>
 
 <div class="lightbox" id="lightbox" hidden><img id="lightbox-img" alt="" /></div>
+<div class="table-modal" id="table-modal" hidden>
+  <div class="table-panel" role="dialog" aria-modal="true">
+    <div class="table-head">
+      <h3 id="table-modal-title"></h3>
+      <button id="table-modal-close" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="table-scroll" id="table-modal-body"></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 
@@ -807,6 +857,13 @@ function buildCard(item, index){
     });
     imgWrap.addEventListener('click', () => openLightbox(img.src));
     imgWrap.appendChild(img);
+  }else if(item.priceTable){
+    imgWrap.classList.add('table-thumb');
+    const ph = document.createElement('div');
+    ph.className = 'placeholder table-ph';
+    ph.innerHTML = '<div class="tt-icon">🎀</div><div class="tt-label">규격별 단가표</div>';
+    imgWrap.appendChild(ph);
+    imgWrap.addEventListener('click', () => openTableModal(item));
   }else{
     const ph = document.createElement('div');
     ph.className = 'placeholder';
@@ -833,7 +890,15 @@ function buildCard(item, index){
     p.textContent = item.price;
     body.appendChild(p);
   }
-  if(!item.code && !item.name && !item.price){
+  if(item.priceTable){
+    const btn = document.createElement('button');
+    btn.className = 'table-btn';
+    btn.type = 'button';
+    btn.textContent = '표 보기 ▸';
+    btn.addEventListener('click', e => { e.stopPropagation(); openTableModal(item); });
+    body.appendChild(btn);
+  }
+  if(!item.code && !item.name && !item.price && !item.priceTable){
     const n = document.createElement('div');
     n.className = 'name';
     n.style.color = 'var(--muted)';
@@ -1171,6 +1236,30 @@ function openLightbox(src){
 }
 lightbox.addEventListener('click', () => { lightbox.hidden = true; lightboxImg.removeAttribute('src'); });
 
+/* ====== PRICE TABLE MODAL ====== */
+const tableModal = $('#table-modal');
+const tableModalTitle = $('#table-modal-title');
+const tableModalBody = $('#table-modal-body');
+function openTableModal(item){
+  const t = item.priceTable;
+  if(!t) return;
+  tableModalTitle.textContent = item.name || '단가표';
+  let html = '<table class="ptable"><thead><tr>';
+  (t.headers||[]).forEach(h => { html += '<th>'+escapeHtml(h)+'</th>'; });
+  html += '</tr></thead><tbody>';
+  (t.rows||[]).forEach(r => {
+    html += '<tr>';
+    r.forEach(c => { html += '<td>'+escapeHtml(c)+'</td>'; });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  tableModalBody.innerHTML = html;
+  tableModal.hidden = false;
+}
+function closeTableModal(){ tableModal.hidden = true; tableModalBody.innerHTML = ''; }
+$('#table-modal-close').addEventListener('click', closeTableModal);
+tableModal.addEventListener('click', e => { if(e.target === tableModal) closeTableModal(); });
+
 /* ====== TOAST ====== */
 let toastTimer;
 function toast(msg){
@@ -1185,6 +1274,7 @@ function toast(msg){
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     if(!lightbox.hidden){ lightbox.hidden = true; lightboxImg.removeAttribute('src'); }
+    else if(!tableModal.hidden){ closeTableModal(); }
     else if(!modal.hidden){ closeModal(); }
   }
 });
