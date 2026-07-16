@@ -1031,16 +1031,25 @@ function buildCard(item, index, readonly, folderName){
     c.innerHTML = `<span class="fld-label">품번</span>${escapeHtml(item.code)}`;
     body.appendChild(c);
   }
+  let unitPrice = null;
   if(item.name){
+    const ex = extractUnitFromName(item.name);   // 품명 속 @단가 분리
+    unitPrice = ex.unit;
     const n = document.createElement('div');
     n.className = 'name';
-    n.innerHTML = `<span class="fld-label">품명</span>${escapeHtml(item.name)}`;
+    n.innerHTML = `<span class="fld-label">품명</span>${escapeHtml(ex.name)}`;
     body.appendChild(n);
+  }
+  if(unitPrice){
+    const u = document.createElement('div');
+    u.className = 'price';
+    u.innerHTML = `<span class="fld-label">단가</span>${escapeHtml(cleanNotes(unitPrice))}`;
+    body.appendChild(u);
   }
   if(item.price){
     const p = document.createElement('div');
     p.className = 'price';
-    p.innerHTML = `<span class="fld-label">${priceFieldLabel(item.price)}</span>${escapeHtml(item.price)}`;
+    p.innerHTML = `<span class="fld-label">${priceFieldLabel(item.price)}</span>${escapeHtml(cleanNotes(item.price))}`;
     body.appendChild(p);
   }
   if(item.priceTable){
@@ -1090,6 +1099,25 @@ function priceFieldLabel(v){
   if(/@|원|단가/.test(s)) return '단가';
   if(/\d\s*MM|[*×xX]\s*\d|규격|사이즈/.test(s)) return '사이즈';
   return '비고';
+}
+// 품명 속 @단가 괄호 분리 → {name: @빠진 품명, unit: '@200' / '1EA @675' / null}
+function extractUnitFromName(name){
+  const s = (name||'').toString();
+  const m = s.match(/\(([^)]*@[^)]*)\)/);
+  if(!m) return {name:s, unit:null};
+  const unit = m[1].trim();
+  const cleaned = s.replace(m[0],'').replace(/\s{2,}/g,' ').trim();
+  return {name:cleaned, unit};
+}
+// 괄호 제거 + 여러 항목 " / "로 통일 (예: "(대금)(신주)" → "대금 / 신주", "(니켈무광)걸어도금" → "니켈무광 / 걸어도금")
+function cleanNotes(s){
+  return (s||'').toString()
+    .replace(/\)\s*\(/g,' / ')
+    .replace(/\)\s*(?=\S)/g,' / ')
+    .replace(/[()]/g,'')
+    .replace(/\s*\/\s*/g,' / ')
+    .replace(/\s{2,}/g,' ')
+    .trim();
 }
 
 /* ====== ADD / EDIT MODAL ====== */
