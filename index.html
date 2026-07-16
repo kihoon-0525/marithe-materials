@@ -293,7 +293,10 @@
     padding:30px;cursor:zoom-out;
   }
   .lightbox[hidden]{display:none}
-  .lightbox img{max-width:100%;max-height:100%;border-radius:6px}
+  .lightbox img{max-width:100%;max-height:100%;border-radius:6px;cursor:pointer}
+  .lb-counter{position:fixed;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:13px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none}
+  .lb-counter[hidden]{display:none}
+  .multi-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.62);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;pointer-events:none}
 
   /* PRICE TABLE CARD + MODAL */
   .img-wrap.table-thumb{cursor:pointer;background:linear-gradient(135deg,#f3f5ee,#e7eedd)}
@@ -337,6 +340,33 @@
   table.ptable thead th{position:sticky;top:0;background:#eef2e6;font-weight:700;color:var(--ink);z-index:1}
   table.ptable td:first-child{font-weight:700;background:#faf9f5}
   table.ptable tbody tr:hover td{background:#f4f6ee}
+
+  /* SNAP FOLDER */
+  .folder-card{cursor:pointer}
+  .folder-inner{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;padding:34px 14px;text-align:center;
+    background:linear-gradient(135deg,#f5f3ec,#eae6da);
+  }
+  .folder-ico{font-size:46px;line-height:1}
+  .folder-name{font-size:16px;font-weight:800;color:var(--ink)}
+  .folder-code{font-size:11px;letter-spacing:.1em;color:var(--muted);font-family:"SF Mono","Menlo",ui-monospace,monospace}
+  .folder-count{font-size:12px;color:var(--muted);margin-top:2px}
+  /* SECTION HEADERS (폴더 대신 단락 구분) */
+  .section-head{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;
+    margin:26px 2px 4px;padding-bottom:9px;border-bottom:1px solid rgba(0,0,0,.09)}
+  .section-head:first-child{margin-top:2px}
+  .section-head .sh-name{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:.01em}
+  .section-head .sh-code{font-size:11px;letter-spacing:.1em;color:var(--muted);font-family:"SF Mono","Menlo",ui-monospace,monospace}
+  .section-head .sh-count{font-size:12px;color:var(--muted);margin-left:auto}
+  .crumb{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:2px 2px 8px}
+  .crumb-back{
+    border:1px solid var(--line);background:var(--paper);border-radius:8px;
+    padding:7px 14px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;
+    transition:background .15s ease;
+  }
+  .crumb-back:hover{background:#eef2e6}
+  .crumb-here{font-size:14px;font-weight:700;color:var(--muted)}
 
   /* TOAST */
   .toast{
@@ -401,7 +431,7 @@
 </head>
 <body>
 
-<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@110)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@110)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@110)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@110)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고", "price": "", "images": ["assets/button_013.jpeg"]}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@250)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@250)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@250)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/metal_029.jpeg"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}, {"code":"","name":"직기 이중직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","138","165"],["25","160","210"],["30","180","210"],["32","188","218"],["35","205","235"],["38","210","248"],["40","225","263"],["45","263","293"],["50","293","323"],["55","338","375"],["62","390","428"],["70","420","465"]]}}, {"code":"","name":"코메즈 이중직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","150","165"],["22","180","195"],["25","180","210"],["28","195","225"],["30","195","240"],["32","210","255"],["35","225","270"],["38","255","285"],["40","270","300"],["42","300","330"],["45","300","330"],["47","330","375"],["50","330","375"],["53","375","420"],["55","375","420"],["57","405","450"],["60","405","450"],["63","450","495"],["66","450","525"],["70","525","570"]]}}, {"code":"","name":"코메즈 중간직","price":"규격별 단가표 (WHITE / BLACK · YD)","images":[],"priceTable":{"headers":["규격(M/M)","단가 (WHITE / YD)","단가 (BLACK / YD)"],"rows":[["20","105","120"],["22","120","135"],["25","120","150"],["28","150","165"],["30","150","165"],["32","165","180"],["35","165","195"],["38","180","210"],["40","195","225"],["42","210","255"],["45","210","255"],["47","230","285"],["50","240","285"],["53","270","300"],["55","270","300"],["57","285","315"],["60","285","315"],["63","315","345"],["66","315","360"],["70","420","450"]]}}]}</script>
+<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@145)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@145)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@145)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@145)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고 + 후염염색", "price": "규격별 단가표 (자연광 코팅)", "images": ["assets/button_013.jpeg"], "priceTable": {"headers": ["규격(M/M)", "단가"], "rows": [["9MM", "135"], ["11MM", "135"], ["13MM", "145"], ["15MM", "170"], ["18MM", "190"], ["20MM", "240"], ["23MM", "320"], ["25MM", "400"], ["28MM", "520"]]}}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "MA-HRN-01", "name": "소뿔 단추 (레이저 로고 · 자연광 코팅)", "price": "규격별 단가표 (BK / 진탈 칼라)", "images": [], "priceTable": {"headers": ["규격(M/M)", "BK 칼라", "진탈 칼라"], "rows": [["9MM", "135", "220"], ["11MM", "135", "220"], ["13MM", "140", "230"], ["15MM", "155", "270"], ["18MM", "190", "310"], ["20MM", "240", "350"], ["23MM", "260", "380"], ["25MM", "375", "480"], ["28MM", "540", "750"]]}}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@280)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@280)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@280)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"folder": "로고 라벨·장식", "code": "MA-MCL", "items": [{"code": "MA-MCL-LOGO", "name": "마리떼 로고 금속장식", "price": "(@680) 도금기준", "images": ["assets/metal_label_marithe.jpg"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}]}, {"folder": "버클", "code": "MA-MCB", "items": [{"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}]}, {"folder": "리벳", "code": "MA-MSR", "items": [{"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}]}, {"folder": "아일렛·스토퍼·팁·캡", "code": "", "items": [{"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}]}, {"folder": "미분류 (정리 예정)", "code": "", "items": [{"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}, {"code": "", "name": "직기 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "138", "165"], ["25", "160", "210"], ["30", "180", "210"], ["32", "188", "218"], ["35", "205", "235"], ["38", "210", "248"], ["40", "225", "263"], ["45", "263", "293"], ["50", "293", "323"], ["55", "338", "375"], ["62", "390", "428"], ["70", "420", "465"]]}}, {"code": "", "name": "코메즈 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "150", "165"], ["22", "180", "195"], ["25", "180", "210"], ["28", "195", "225"], ["30", "195", "240"], ["32", "210", "255"], ["35", "225", "270"], ["38", "255", "285"], ["40", "270", "300"], ["42", "300", "330"], ["45", "300", "330"], ["47", "330", "375"], ["50", "330", "375"], ["53", "375", "420"], ["55", "375", "420"], ["57", "405", "450"], ["60", "405", "450"], ["63", "450", "495"], ["66", "450", "525"], ["70", "525", "570"]]}}, {"code": "", "name": "코메즈 중간직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "105", "120"], ["22", "120", "135"], ["25", "120", "150"], ["28", "150", "165"], ["30", "150", "165"], ["32", "165", "180"], ["35", "165", "195"], ["38", "180", "210"], ["40", "195", "225"], ["42", "210", "255"], ["45", "210", "255"], ["47", "230", "285"], ["50", "240", "285"], ["53", "270", "300"], ["55", "270", "300"], ["57", "285", "315"], ["60", "285", "315"], ["63", "315", "345"], ["66", "315", "360"], ["70", "420", "450"]]}}], "SNAP": [{"folder": "신주스냅", "code": "MA-MSS", "items": [{"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSS-LOGO", "name": "마리떼 로고 신주스냅", "price": "(13MM @115 / 15MM @128) 바렐도금", "images": ["assets/snap_mss_logo.jpg"]}]}, {"folder": "캐스팅스냅", "code": "MA-MCS", "items": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/snap_mcs006_a.jpg", "assets/snap_mcs006_b.jpg"]}]}]}</script>
 
 <header class="brand-bar">
   <div class="bar-row">
@@ -493,7 +523,7 @@
 
 <button class="fab" id="fab" title="자재 추가" aria-label="자재 추가" data-admin>＋</button>
 
-<div class="lightbox" id="lightbox" hidden><img id="lightbox-img" alt="" /></div>
+<div class="lightbox" id="lightbox" hidden><img id="lightbox-img" alt="" /><div id="lightbox-counter" class="lb-counter" hidden></div></div>
 <div class="table-modal" id="table-modal" hidden>
   <div class="table-panel" role="dialog" aria-modal="true">
     <div class="table-head">
@@ -588,7 +618,34 @@ const STORAGE_KEY = 'marithe_material_v1';
 let CATEGORIES = Object.keys(INITIAL_DATA_FALLBACK);
 let state = JSON.parse(JSON.stringify(INITIAL_DATA_FALLBACK)); // 초기값, 곧 덮어씀
 let currentTab = CATEGORIES[0];
+let currentFolder = null; // (구) 드릴다운용 — 이제 섹션뷰라 뷰에선 항상 null 유지
+let editFolder = null;    // 섹션뷰에서 관리자 추가/편집/삭제 대상 폴더명
 let editingIndex = -1; // -1 = adding new
+
+/* ====== 폴더형 카테고리(SNAP) 헬퍼 ====== */
+// 폴더형 카테고리인지 — 항목들이 items 배열(=폴더)을 가지면 폴더형
+function isFolderCat(cat){ const r = state[cat]||[]; return r.some(e => e && Array.isArray(e.items)); }
+// 카테고리 전체 자재 수 (폴더형이면 폴더 내부 합산)
+function catCount(cat){
+  const r = state[cat]||[];
+  if(isFolderCat(cat)) return r.reduce((s,f)=> s + (f.items? f.items.length : 0), 0);
+  return r.length;
+}
+// 모든 자재 평탄화 (엑셀/검색용). 폴더형이면 _folder 라벨 부착
+function flatItems(cat){
+  const r = state[cat]||[];
+  if(isFolderCat(cat)) return r.flatMap(f => (f.items||[]).map(it => Object.assign({_folder:f.folder}, it)));
+  return r;
+}
+// 지금 add/edit/delete 대상이 되는 배열 (폴더 안이면 그 폴더의 items)
+function currentItemsArray(){
+  const r = state[currentTab]||[];
+  if(isFolderCat(currentTab)){
+    const fname = editFolder || currentFolder;
+    if(fname){ const f = r.find(x => x.folder === fname); return f ? f.items : []; }
+  }
+  return r;
+}
 let pendingImageDataUrl = null; // when user picks new image in modal
 
 /* GitHub raw에서 최신 data.json 가져오기. 실패 시 fallback 반환. */
@@ -787,9 +844,9 @@ function renderTabs(){
     if(cat === currentTab) b.classList.add('active');
     const cnt = document.createElement('span');
     cnt.className = 'count';
-    cnt.textContent = `(${state[cat].length})`;
+    cnt.textContent = `(${catCount(cat)})`;
     b.appendChild(cnt);
-    b.addEventListener('click', () => { currentTab = cat; renderTabs(); renderGrid(); updateSaveBar(); });
+    b.addEventListener('click', () => { currentTab = cat; currentFolder = null; renderTabs(); renderGrid(); updateSaveBar(); });
     tabsEl.appendChild(b);
   }
 }
@@ -801,14 +858,48 @@ function updateSaveBar(){
 
 function renderGrid(){
   gridEl.innerHTML = '';
-  const items = state[currentTab] || [];
   const q = (searchEl.value || '').trim().toLowerCase();
+  const folderTab = isFolderCat(currentTab);
+
+  // ① 섹션 뷰 (폴더형 탭 + 검색어 없음): 폴더별 단락 헤더 + 카드 나열 (드릴다운 X)
+  if(folderTab && !q){
+    const folders = state[currentTab] || [];
+    infoEl.textContent = `${folders.length}개 섹션 · ${catCount(currentTab)}건`;
+    for(const f of folders){
+      gridEl.appendChild(buildSectionHead(f));
+      (f.items || []).forEach((it, i) => gridEl.appendChild(buildCard(it, i, false, f.folder)));
+      if(IS_ADMIN){
+        const tile = document.createElement('div');
+        tile.className = 'add-tile';
+        tile.setAttribute('data-admin','');
+        tile.innerHTML = `<div class="plus">＋</div><div class="label">새 자재 추가</div><div class="hint">${escapeHtml(f.folder)}</div>`;
+        tile.addEventListener('click', () => openAdd(f.folder));
+        gridEl.appendChild(tile);
+      }
+    }
+    return;
+  }
+
+  // 보여줄 자재 배열 결정
+  let items, readonlyFlat = false;
+  if(folderTab && q){
+    // 폴더형 탭 검색 → 모든 폴더의 자재를 평탄화해서 검색 (편집은 폴더 안에서)
+    items = flatItems(currentTab); readonlyFlat = true;
+  }else if(folderTab && currentFolder){
+    const f = (state[currentTab]||[]).find(x => x.folder === currentFolder);
+    if(!f){ currentFolder = null; return renderGrid(); }
+    items = f.items;
+    gridEl.appendChild(buildCrumb(f.folder));
+  }else{
+    items = state[currentTab] || [];
+  }
+
   const filtered = !q ? items : items.filter(it =>
     (it.code||'').toLowerCase().includes(q) ||
     (it.name||'').toLowerCase().includes(q) ||
     (it.price||'').toLowerCase().includes(q)
   );
-  infoEl.textContent = q ? `${filtered.length} / ${items.length}건` : `${items.length}건`;
+  infoEl.textContent = q ? `${filtered.length} / ${catCount(currentTab)}건` : `${items.length}건`;
 
   if(filtered.length === 0){
     const empty = document.createElement('div');
@@ -822,25 +913,60 @@ function renderGrid(){
 
   for(const it of filtered){
     const realIndex = items.indexOf(it);
-    gridEl.appendChild(buildCard(it, realIndex));
+    gridEl.appendChild(buildCard(it, realIndex, readonlyFlat));
   }
 
-  // Always show "+ 새 자재" tile at the end (admin only, not while searching)
-  if(IS_ADMIN && !q){
+  // "+ 새 자재" 타일 (admin, 검색X). 폴더형 탭은 폴더 안에서만.
+  if(IS_ADMIN && !q && !(folderTab && !currentFolder)){
     const tile = document.createElement('div');
     tile.className = 'add-tile';
     tile.setAttribute('data-admin','');
     tile.innerHTML = `
       <div class="plus">＋</div>
       <div class="label">새 자재 추가</div>
-      <div class="hint">${currentTab}</div>
+      <div class="hint">${folderTab ? escapeHtml(currentFolder) : escapeHtml(currentTab)}</div>
     `;
     tile.addEventListener('click', openAdd);
     gridEl.appendChild(tile);
   }
 }
 
-function buildCard(item, index){
+function buildSectionHead(f){
+  const h = document.createElement('div');
+  h.className = 'section-head';
+  const cnt = (f.items||[]).length;
+  h.innerHTML =
+    `<span class="sh-name">${escapeHtml(f.folder)}</span>` +
+    (f.code ? `<span class="sh-code">${escapeHtml(f.code)}</span>` : '') +
+    `<span class="sh-count">${cnt}건</span>`;
+  return h;
+}
+
+function buildFolderCard(f){
+  const card = document.createElement('div');
+  card.className = 'card folder-card';
+  const cnt = (f.items||[]).length;
+  const inner = document.createElement('div');
+  inner.className = 'folder-inner';
+  inner.innerHTML = `
+    <div class="folder-ico">📁</div>
+    <div class="folder-name">${escapeHtml(f.folder)}</div>
+    ${f.code ? `<div class="folder-code">${escapeHtml(f.code)}</div>` : ''}
+    <div class="folder-count">${cnt}건</div>`;
+  card.appendChild(inner);
+  card.addEventListener('click', () => { currentFolder = f.folder; renderGrid(); });
+  return card;
+}
+
+function buildCrumb(name){
+  const bar = document.createElement('div');
+  bar.className = 'crumb';
+  bar.innerHTML = `<button type="button" class="crumb-back">← ${escapeHtml(currentTab)}</button><span class="crumb-here">${escapeHtml(name)}</span>`;
+  bar.querySelector('.crumb-back').addEventListener('click', () => { currentFolder = null; renderGrid(); });
+  return bar;
+}
+
+function buildCard(item, index, readonly, folderName){
   const card = document.createElement('div');
   card.className = 'card';
   const imgWrap = document.createElement('div');
@@ -857,8 +983,15 @@ function buildCard(item, index){
       ph.textContent = '이미지를 불러올 수 없어요';
       imgWrap.appendChild(ph);
     });
-    imgWrap.addEventListener('click', () => openLightbox(img.src));
+    const multi = item.images.length > 1;
+    imgWrap.addEventListener('click', () => openLightbox(multi ? item.images : img.src));
     imgWrap.appendChild(img);
+    if(multi){
+      const badge = document.createElement('div');
+      badge.className = 'multi-badge';
+      badge.textContent = `📷 ${item.images.length}`;
+      imgWrap.appendChild(badge);
+    }
   }else if(item.priceTable){
     imgWrap.classList.add('table-thumb');
     const ph = document.createElement('div');
@@ -911,19 +1044,19 @@ function buildCard(item, index){
   card.appendChild(imgWrap);
   card.appendChild(body);
 
-  if(IS_ADMIN){
+  if(IS_ADMIN && !readonly){
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.setAttribute('data-admin','');
     const btnEdit = document.createElement('button');
     btnEdit.title = '편집';
     btnEdit.innerHTML = '✎';
-    btnEdit.addEventListener('click', e => { e.stopPropagation(); openEdit(index); });
+    btnEdit.addEventListener('click', e => { e.stopPropagation(); openEdit(index, folderName); });
     const btnDel = document.createElement('button');
     btnDel.className = 'del';
     btnDel.title = '삭제';
     btnDel.innerHTML = '🗑';
-    btnDel.addEventListener('click', e => { e.stopPropagation(); removeItem(index); });
+    btnDel.addEventListener('click', e => { e.stopPropagation(); removeItem(index, folderName); });
     actions.appendChild(btnEdit);
     actions.appendChild(btnDel);
     card.appendChild(actions);
@@ -943,19 +1076,30 @@ const imgPick = $('#img-pick');
 const imgPickBtn = $('#img-pick-btn');
 const fieldsStack = $('#fields-stack');
 
-function openAdd(){
+function openAdd(folderName){
   if(!IS_ADMIN) return;
+  if(isFolderCat(currentTab)){
+    // 폴더형 탭은 반드시 섹션(폴더)을 지정해서 추가
+    if(typeof folderName !== 'string'){
+      alert('각 섹션 하단의 「＋ 새 자재 추가」 타일을 눌러 폴더를 지정해 추가해주세요.');
+      return;
+    }
+    editFolder = folderName;
+  }else{
+    editFolder = null;
+  }
   editingIndex = -1;
   pendingImageDataUrl = null;
-  $('#modal-title').textContent = `${currentTab} — 새 자재 추가`;
+  $('#modal-title').textContent = `${editFolder || currentTab} — 새 자재 추가`;
   form.reset();
   setPreview(null);
   modal.hidden = false;
 }
 
-function openEdit(idx){
+function openEdit(idx, folderName){
   if(!IS_ADMIN) return;
-  const it = state[currentTab][idx];
+  editFolder = (typeof folderName === 'string') ? folderName : null;
+  const it = currentItemsArray()[idx];
   editingIndex = idx;
   pendingImageDataUrl = null;
   $('#modal-title').textContent = `${currentTab} — 자재 편집`;
@@ -970,6 +1114,7 @@ function openEdit(idx){
 
 function closeModal(){
   modal.hidden = true;
+  editFolder = null;
 }
 
 function setPreview(src){
@@ -1072,9 +1217,9 @@ form.addEventListener('submit', e => {
   if(editingIndex < 0){
     // Add new
     const item = { ...data, images: pendingImageDataUrl ? [pendingImageDataUrl] : [] };
-    state[currentTab].push(item);
+    currentItemsArray().push(item);
   }else{
-    const it = state[currentTab][editingIndex];
+    const it = currentItemsArray()[editingIndex];
     Object.assign(it, data);
     if(pendingImageDataUrl){
       it.images = [pendingImageDataUrl];
@@ -1094,12 +1239,15 @@ $('#form-cancel').addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
 
 /* ====== DELETE ====== */
-function removeItem(idx){
+function removeItem(idx, folderName){
   if(!IS_ADMIN) return;
-  const it = state[currentTab][idx];
+  editFolder = (typeof folderName === 'string') ? folderName : null;
+  const arr = currentItemsArray();
+  const it = arr[idx];
   const label = it.code || it.name || '(이름 없음)';
-  if(!confirm(`'${label}' 항목을 삭제할까요?`)) return;
-  state[currentTab].splice(idx, 1);
+  if(!confirm(`'${label}' 항목을 삭제할까요?`)){ editFolder = null; return; }
+  arr.splice(idx, 1);
+  editFolder = null;
   saveState();
   renderTabs();
   renderGrid();
@@ -1205,17 +1353,18 @@ $('#btn-excel').addEventListener('click', () => {
   }
   const wb = XLSX.utils.book_new();
   for(const cat of CATEGORIES){
-    const rows = (state[cat] || []).map((it, i) => ({
+    const rows = flatItems(cat).map((it, i) => ({
       'No.': i + 1,
+      '폴더': it._folder || '',
       '코드': it.code || '',
       '이름': it.name || '',
       '가격 / 스펙': it.price || '',
       '이미지 수': (it.images || []).length,
     }));
-    const ws = XLSX.utils.json_to_sheet(rows.length ? rows : [{'No.':'', '코드':'', '이름':'', '가격 / 스펙':'', '이미지 수':''}]);
+    const ws = XLSX.utils.json_to_sheet(rows.length ? rows : [{'No.':'', '폴더':'', '코드':'', '이름':'', '가격 / 스펙':'', '이미지 수':''}]);
     // Auto-fit-ish column widths
     ws['!cols'] = [
-      { wch: 5 }, { wch: 22 }, { wch: 40 }, { wch: 28 }, { wch: 8 },
+      { wch: 5 }, { wch: 12 }, { wch: 22 }, { wch: 40 }, { wch: 28 }, { wch: 8 },
     ];
     // Sheet name max 31 chars, no special chars
     const safe = cat.replace(/[\\\/\?\*\[\]:]/g,'_').slice(0,31);
@@ -1232,11 +1381,30 @@ searchEl.addEventListener('input', renderGrid);
 /* ====== LIGHTBOX ====== */
 const lightbox = $('#lightbox');
 const lightboxImg = $('#lightbox-img');
-function openLightbox(src){
-  lightboxImg.src = src;
+const lightboxCounter = $('#lightbox-counter');
+let lbImgs = [], lbIdx = 0;
+function openLightbox(srcOrArr){
+  lbImgs = Array.isArray(srcOrArr) ? srcOrArr.slice() : [srcOrArr];
+  lbIdx = 0;
+  showLbImg();
   lightbox.hidden = false;
 }
-lightbox.addEventListener('click', () => { lightbox.hidden = true; lightboxImg.removeAttribute('src'); });
+function showLbImg(){
+  lightboxImg.src = lbImgs[lbIdx];
+  if(lbImgs.length > 1){
+    lightboxCounter.textContent = `${lbIdx+1} / ${lbImgs.length} · 탭하면 다음 ▸`;
+    lightboxCounter.hidden = false;
+  }else{
+    lightboxCounter.hidden = true;
+  }
+}
+function closeLightbox(){ lightbox.hidden = true; lightboxImg.removeAttribute('src'); lbImgs = []; }
+// 배경 클릭 = 닫기
+lightbox.addEventListener('click', closeLightbox);
+// 이미지 클릭 = 다음 장(여러 장일 때), 닫기 방지
+lightboxImg.addEventListener('click', e => {
+  if(lbImgs.length > 1){ e.stopPropagation(); lbIdx = (lbIdx + 1) % lbImgs.length; showLbImg(); }
+});
 
 /* ====== PRICE TABLE MODAL ====== */
 const tableModal = $('#table-modal');
@@ -1275,7 +1443,7 @@ function toast(msg){
 /* ====== KEYBOARD ====== */
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
-    if(!lightbox.hidden){ lightbox.hidden = true; lightboxImg.removeAttribute('src'); }
+    if(!lightbox.hidden){ closeLightbox(); }
     else if(!tableModal.hidden){ closeTableModal(); }
     else if(!modal.hidden){ closeModal(); }
   }
