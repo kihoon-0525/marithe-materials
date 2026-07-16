@@ -111,7 +111,15 @@
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-    gap:18px;
+    gap:22px;
+  }
+  /* 카드 필드 앞 라벨 (품번/품명/사이즈 등) */
+  .fld-label{
+    display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.02em;
+    color:#8a8577;background:rgba(0,0,0,.055);border-radius:4px;
+    padding:1px 5px;margin-right:6px;vertical-align:middle;position:relative;top:-1px;
+    font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    text-transform:none;letter-spacing:0;
   }
   .card{
     background:var(--paper);
@@ -364,8 +372,8 @@
   .folder-count{font-size:12px;color:var(--muted);margin-top:2px}
   /* SECTION HEADERS (폴더 대신 단락 구분) */
   .section-head{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;
-    margin:26px 2px 4px;padding-bottom:9px;border-bottom:1px solid rgba(0,0,0,.09)}
-  .section-head:first-child{margin-top:2px}
+    margin:46px 2px 8px;padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,.09)}
+  .section-head:first-child{margin-top:4px}
   .section-head .sh-name{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:.01em}
   .section-head .sh-code{font-size:11px;letter-spacing:.1em;color:var(--muted);font-family:"SF Mono","Menlo",ui-monospace,monospace}
   .section-head .sh-count{font-size:12px;color:var(--muted);margin-left:auto}
@@ -1020,19 +1028,19 @@ function buildCard(item, index, readonly, folderName){
   if(item.code){
     const c = document.createElement('div');
     c.className = 'code';
-    c.textContent = item.code;
+    c.innerHTML = `<span class="fld-label">품번</span>${escapeHtml(item.code)}`;
     body.appendChild(c);
   }
   if(item.name){
     const n = document.createElement('div');
     n.className = 'name';
-    n.textContent = item.name;
+    n.innerHTML = `<span class="fld-label">품명</span>${escapeHtml(item.name)}`;
     body.appendChild(n);
   }
   if(item.price){
     const p = document.createElement('div');
     p.className = 'price';
-    p.textContent = item.price;
+    p.innerHTML = `<span class="fld-label">${priceFieldLabel(item.price)}</span>${escapeHtml(item.price)}`;
     body.appendChild(p);
   }
   if(item.priceTable){
@@ -1075,6 +1083,14 @@ function buildCard(item, index, readonly, folderName){
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// 세번째 줄(price 필드) 내용에 따라 라벨 자동 선택
+function priceFieldLabel(v){
+  const s = (v||'').toString();
+  if(/@|원|단가/.test(s)) return '단가';
+  if(/\d\s*MM|[*×xX]\s*\d|규격|사이즈/.test(s)) return '사이즈';
+  return '비고';
+}
 
 /* ====== ADD / EDIT MODAL ====== */
 const modal = $('#modal');
