@@ -263,6 +263,14 @@
       "images": [
         "assets/leather_patch_005_clean.png"
       ]
+    },
+    {
+      "code": "MA-MLP-006",
+      "name": "LOGO LEATHER PATCH",
+      "price": "(70MM*48MM)",
+      "images": [
+        "assets/leather_patch_006_clean.png"
+      ]
     }
   ],
   "METAL": [
@@ -362,6 +370,14 @@
           "price": "",
           "images": [
             "assets/metal_006_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCB-002",
+          "name": "금속버클",
+          "price": "@280",
+          "images": [
+            "assets/buckle_mcb002_clean.png"
           ]
         }
       ]
