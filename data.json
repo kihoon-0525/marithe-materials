@@ -215,61 +215,115 @@
       }
     }
   ],
-  "LEATHER PATCH": [
+  "SNAP": [
     {
-      "code": "MA-MLP-001",
-      "name": "LOGO LEATHER PATCH (@200)",
-      "price": "(43MM*20.6MM)",
-      "images": [
-        "assets/leather_patch_000_clean.png"
+      "folder": "신주스냅",
+      "code": "MA-MSS",
+      "items": [
+        {
+          "code": "MA-MSS-001",
+          "name": "A번 금형 헤드",
+          "price": "(신주) 15MM",
+          "images": [
+            "assets/metal_000_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MSS-002",
+          "name": "A번 금형 헤드",
+          "price": "(신주) 13MM",
+          "images": [
+            "assets/metal_010_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MSS-003",
+          "name": "A번 금형 헤드",
+          "price": "(신주) 17MM",
+          "images": [
+            "assets/metal_024_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MSS-LOGO",
+          "name": "마리떼 로고 신주스냅",
+          "price": "(13MM @115 / 15MM @128) 바렐도금",
+          "images": [
+            "assets/snap_mss_logo_clean.png"
+          ]
+        },
+        {
+          "code": "",
+          "name": "스냅 밑짝 B·C·D",
+          "price": "",
+          "images": [
+            "assets/metal_018_clean.png",
+            "assets/metal_025_clean.png"
+          ]
+        }
       ]
     },
     {
-      "code": "MA-MLP-002",
-      "name": "LOGO LEATHER PATCH (@250)",
-      "price": "(55MM*28MM)",
-      "images": [
-        "assets/leather_patch_001_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLT-001",
-      "name": "LOGO LEATHER TIP (1EA @675)",
-      "price": "",
-      "images": [
-        "assets/leather_patch_002_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-003",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(60MM*35MM)",
-      "images": [
-        "assets/leather_patch_003_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-004",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(50MM*35MM)",
-      "images": [
-        "assets/leather_patch_004_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-005",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(45MM*30MM)",
-      "images": [
-        "assets/leather_patch_005_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-006",
-      "name": "LOGO LEATHER PATCH",
-      "price": "(70MM*48MM)",
-      "images": [
-        "assets/leather_patch_006_clean.png"
+      "folder": "캐스팅스냅",
+      "code": "MA-MCS",
+      "items": [
+        {
+          "code": "MA-MCS-002",
+          "name": "A번 금형 헤드 15MM",
+          "price": "(15MM)",
+          "images": [
+            "assets/metal_009_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCS-001",
+          "name": "A번 금형 헤드 13MM",
+          "price": "(13MM)",
+          "images": [
+            "assets/metal_001_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCS-003",
+          "name": "캐스팅 스냅 헤드 + 레이저 로고",
+          "price": "(13MM)",
+          "images": [
+            "assets/metal_026_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCS-004",
+          "name": "캐스팅 스냅 헤드 + 레이저 로고",
+          "price": "(15MM)",
+          "images": [
+            "assets/metal_027_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCS-005",
+          "name": "캐스팅 스냅 헤드(음각로고 금형)",
+          "price": "(13MM)",
+          "images": [
+            "assets/metal_028_clean.png"
+          ]
+        },
+        {
+          "code": "MA-MCS-006",
+          "name": "캐스팅 스냅 헤드(음각로고 금형)",
+          "price": "(15MM)",
+          "images": [
+            "assets/snap_mcs006_b_clean.png"
+          ]
+        },
+        {
+          "code": "",
+          "name": "스냅 밑짝 B·C·D",
+          "price": "",
+          "images": [
+            "assets/metal_018_clean.png",
+            "assets/metal_025_clean.png"
+          ]
+        }
       ]
     }
   ],
@@ -865,115 +919,61 @@
       }
     }
   ],
-  "SNAP": [
+  "LEATHER PATCH": [
     {
-      "folder": "신주스냅",
-      "code": "MA-MSS",
-      "items": [
-        {
-          "code": "MA-MSS-001",
-          "name": "A번 금형 헤드",
-          "price": "(신주) 15MM",
-          "images": [
-            "assets/metal_000_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MSS-002",
-          "name": "A번 금형 헤드",
-          "price": "(신주) 13MM",
-          "images": [
-            "assets/metal_010_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MSS-003",
-          "name": "A번 금형 헤드",
-          "price": "(신주) 17MM",
-          "images": [
-            "assets/metal_024_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MSS-LOGO",
-          "name": "마리떼 로고 신주스냅",
-          "price": "(13MM @115 / 15MM @128) 바렐도금",
-          "images": [
-            "assets/snap_mss_logo_clean.png"
-          ]
-        },
-        {
-          "code": "",
-          "name": "스냅 밑짝 B·C·D",
-          "price": "",
-          "images": [
-            "assets/metal_018_clean.png",
-            "assets/metal_025_clean.png"
-          ]
-        }
+      "code": "MA-MLP-001",
+      "name": "LOGO LEATHER PATCH (@200)",
+      "price": "(43MM*20.6MM)",
+      "images": [
+        "assets/leather_patch_000_clean.png"
       ]
     },
     {
-      "folder": "캐스팅스냅",
-      "code": "MA-MCS",
-      "items": [
-        {
-          "code": "MA-MCS-002",
-          "name": "A번 금형 헤드 15MM",
-          "price": "(15MM)",
-          "images": [
-            "assets/metal_009_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MCS-001",
-          "name": "A번 금형 헤드 13MM",
-          "price": "(13MM)",
-          "images": [
-            "assets/metal_001_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MCS-003",
-          "name": "캐스팅 스냅 헤드 + 레이저 로고",
-          "price": "(13MM)",
-          "images": [
-            "assets/metal_026_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MCS-004",
-          "name": "캐스팅 스냅 헤드 + 레이저 로고",
-          "price": "(15MM)",
-          "images": [
-            "assets/metal_027_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MCS-005",
-          "name": "캐스팅 스냅 헤드(음각로고 금형)",
-          "price": "(13MM)",
-          "images": [
-            "assets/metal_028_clean.png"
-          ]
-        },
-        {
-          "code": "MA-MCS-006",
-          "name": "캐스팅 스냅 헤드(음각로고 금형)",
-          "price": "(15MM)",
-          "images": [
-            "assets/snap_mcs006_b_clean.png"
-          ]
-        },
-        {
-          "code": "",
-          "name": "스냅 밑짝 B·C·D",
-          "price": "",
-          "images": [
-            "assets/metal_018_clean.png",
-            "assets/metal_025_clean.png"
-          ]
-        }
+      "code": "MA-MLP-002",
+      "name": "LOGO LEATHER PATCH (@250)",
+      "price": "(55MM*28MM)",
+      "images": [
+        "assets/leather_patch_001_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLT-001",
+      "name": "LOGO LEATHER TIP (1EA @675)",
+      "price": "",
+      "images": [
+        "assets/leather_patch_002_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-003",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(60MM*35MM)",
+      "images": [
+        "assets/leather_patch_003_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-004",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(50MM*35MM)",
+      "images": [
+        "assets/leather_patch_004_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-005",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(45MM*30MM)",
+      "images": [
+        "assets/leather_patch_005_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-006",
+      "name": "LOGO LEATHER PATCH",
+      "price": "(70MM*48MM)",
+      "images": [
+        "assets/leather_patch_006_clean.png"
       ]
     }
   ]
