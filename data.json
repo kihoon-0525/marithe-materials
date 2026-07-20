@@ -596,6 +596,64 @@
       ]
     }
   ],
+  "LEATHER PATCH": [
+    {
+      "code": "MA-MLP-001",
+      "name": "LOGO LEATHER PATCH (@200)",
+      "price": "(43MM*20.6MM)",
+      "images": [
+        "assets/leather_patch_000_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-002",
+      "name": "LOGO LEATHER PATCH (@250)",
+      "price": "(55MM*28MM)",
+      "images": [
+        "assets/leather_patch_001_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLT-001",
+      "name": "LOGO LEATHER TIP (1EA @675)",
+      "price": "",
+      "images": [
+        "assets/leather_patch_002_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-003",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(60MM*35MM)",
+      "images": [
+        "assets/leather_patch_003_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-004",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(50MM*35MM)",
+      "images": [
+        "assets/leather_patch_004_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-005",
+      "name": "LOGO LEATHER PATCH (@280)",
+      "price": "(45MM*30MM)",
+      "images": [
+        "assets/leather_patch_005_clean.png"
+      ]
+    },
+    {
+      "code": "MA-MLP-006",
+      "name": "LOGO LEATHER PATCH",
+      "price": "(70MM*48MM)",
+      "images": [
+        "assets/leather_patch_006_clean.png"
+      ]
+    }
+  ],
   "BAND": [
     {
       "code": "MA-13WB",
@@ -917,64 +975,6 @@
           ]
         ]
       }
-    }
-  ],
-  "LEATHER PATCH": [
-    {
-      "code": "MA-MLP-001",
-      "name": "LOGO LEATHER PATCH (@200)",
-      "price": "(43MM*20.6MM)",
-      "images": [
-        "assets/leather_patch_000_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-002",
-      "name": "LOGO LEATHER PATCH (@250)",
-      "price": "(55MM*28MM)",
-      "images": [
-        "assets/leather_patch_001_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLT-001",
-      "name": "LOGO LEATHER TIP (1EA @675)",
-      "price": "",
-      "images": [
-        "assets/leather_patch_002_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-003",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(60MM*35MM)",
-      "images": [
-        "assets/leather_patch_003_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-004",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(50MM*35MM)",
-      "images": [
-        "assets/leather_patch_004_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-005",
-      "name": "LOGO LEATHER PATCH (@280)",
-      "price": "(45MM*30MM)",
-      "images": [
-        "assets/leather_patch_005_clean.png"
-      ]
-    },
-    {
-      "code": "MA-MLP-006",
-      "name": "LOGO LEATHER PATCH",
-      "price": "(70MM*48MM)",
-      "images": [
-        "assets/leather_patch_006_clean.png"
-      ]
     }
   ]
 }
