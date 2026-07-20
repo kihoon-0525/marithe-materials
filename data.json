@@ -357,6 +357,14 @@
           "images": [
             "assets/metal_014_clean.png"
           ]
+        },
+        {
+          "code": "MA-MCL-009",
+          "name": "양각 로고 장식",
+          "price": "",
+          "images": [
+            "assets/mcl009_clean.png"
+          ]
         }
       ]
     },
