@@ -59,7 +59,7 @@
     {
       "code": "MA-MTL-01",
       "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)",
-      "price": "(15MM-@155 18MM-@170)",
+      "price": "(15MM-@160 18MM-@160)",
       "images": [
         "assets/button_009_clean.png"
       ]
@@ -504,7 +504,7 @@
       "items": [
         {
           "code": "MA-MCB-001",
-          "name": "금형 17MM",
+          "name": "금형 17MM (@330)",
           "price": "(캐스팅) 데님 캔톤",
           "images": [
             "assets/metal_007_clean.png",
@@ -513,7 +513,7 @@
         },
         {
           "code": "MA-MSB-001",
-          "name": "금형 17MM",
+          "name": "금형 17MM (@150)",
           "price": "(신주) 데님 캔톤",
           "images": [
             "assets/metal_020_clean.png"
