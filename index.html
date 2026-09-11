@@ -445,11 +445,100 @@
   .save-bar-actions button:hover{background:#7a5c00;color:#fff;border-color:#7a5c00}
   .save-bar-actions button.primary{background:#7a5c00;color:#fff;border-color:#7a5c00}
   .save-bar-actions button.primary:hover{background:#5a3c00}
+  /* ===== 염색비 계산기 ===== */
+  body.on-dye .search-bar{display:none}
+  body.on-dye .save-bar[data-admin]{display:none !important}
+  body.on-dye .grid{display:block}
+  .dye-wrap{display:flex;flex-direction:column;gap:18px}
+  .dye-top{display:grid;grid-template-columns:minmax(290px,360px) 1fr;gap:18px;align-items:start}
+  @media(max-width:880px){.dye-top{grid-template-columns:1fr}}
+  .dye-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;box-shadow:var(--shadow)}
+  .dye-card h3{margin:0 0 16px;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--muted)}
+  .dye-card h3 em{font-style:normal;color:var(--ink);letter-spacing:.02em;font-weight:700}
+  .dye-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+  .dye-row[hidden]{display:none}
+  .dye-row>label{font-size:12.5px;font-weight:600;width:72px;flex:none;color:#555}
+  .dye-row select,.dye-row input{padding:8px 10px;border:1px solid var(--line);
+    border-radius:8px;background:#fff;font-size:13px;color:var(--ink)}
+  .dye-row select{flex:1;min-width:0}
+  .dye-row input[type=number]{width:86px;text-align:right;font-variant-numeric:tabular-nums}
+  .dye-row .u{font-size:12px;color:var(--muted)}
+  .dye-row .hint{font-size:11px;color:var(--muted);margin-left:auto}
+  .dye-mode{display:flex;margin:2px 0 16px;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .dye-mode button{flex:1;padding:9px 4px;background:#fff;border:none;
+    font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+  .dye-mode button.on{background:var(--ink);color:#fff}
+  .dye-sep{border:none;border-top:1px solid var(--line);margin:16px 0 14px}
+  /* 결과 */
+  .dye-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+    gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .dye-kpi>div{background:#fff;padding:13px 15px}
+  .dye-kpi .k{font-size:10.5px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;font-weight:700}
+  .dye-kpi .v{font-size:19px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .dye-kpi .v s{text-decoration:none;font-size:12px;font-weight:500;color:var(--muted);margin-left:2px}
+  .dye-kpi>div.big{background:#111}
+  .dye-kpi>div.big .k{color:rgba(255,255,255,.55)}
+  .dye-kpi>div.big .v{color:#fff}
+  .dye-kpi>div.big .v s{color:rgba(255,255,255,.5)}
+  .dye-gauge-wrap{margin:16px 0 0}
+  .dye-gauge{height:9px;border-radius:999px;background:#ece9e1;overflow:hidden}
+  .dye-gauge i{display:block;height:100%;border-radius:999px}
+  .dye-gauge-lbl{display:flex;justify-content:space-between;font-size:11px;
+    color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+  .dye-tip{border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.65;margin-top:12px}
+  .dye-tip b{font-weight:700}
+  .dye-tip .big{font-size:14px;font-weight:700}
+  .dye-tip.ok{background:#eff6e9;border:1px solid #d2e4c2;color:#33571f}
+  .dye-tip.warn{background:#fdeded;border:1px solid #f2c9c9;color:#8d2020}
+  .dye-tip.info{background:#eef2f9;border:1px solid #cdd9ea;color:#22456f}
+  .dye-chain{font-size:12px;color:var(--muted);line-height:1.9;margin-top:14px;
+    font-variant-numeric:tabular-nums}
+  .dye-chain b{color:var(--ink);font-weight:700}
+  /* 표 */
+  .dye-scroll{overflow-x:auto;margin:0 -4px}
+  table.dyetab{border-collapse:collapse;width:100%;font-size:12.5px;
+    font-variant-numeric:tabular-nums}
+  table.dyetab th,table.dyetab td{padding:9px 12px;border-bottom:1px solid var(--line);
+    text-align:right;white-space:nowrap}
+  table.dyetab th{background:#f4f3ee;font-size:10.5px;letter-spacing:.06em;
+    color:var(--muted);font-weight:800}
+  table.dyetab th:first-child,table.dyetab td:first-child{text-align:left}
+  table.dyetab tbody tr:hover td{background:#faf9f5}
+  table.dyetab tr.sel td{background:#f2f6ec}
+  table.dyetab td.em{font-weight:700;color:var(--ink)}
+  table.dyetab tbody tr{cursor:pointer}
+  /* 공정 설명 */
+  details.dye-help summary{cursor:pointer;font-size:13px;font-weight:700;
+    letter-spacing:.02em;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px}
+  details.dye-help summary::-webkit-details-marker{display:none}
+  details.dye-help summary:before{content:'＋';font-weight:400;color:var(--muted)}
+  details.dye-help[open] summary:before{content:'－'}
+  details.dye-help[open] summary{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .dye-flow{margin:0;padding:0;list-style:none;font-size:13px;line-height:1.7}
+  .dye-flow li{padding:11px 0 11px 34px;position:relative;border-bottom:1px dashed var(--line)}
+  .dye-flow li:last-child{border-bottom:none}
+  .dye-flow li .n{position:absolute;left:0;top:12px;width:22px;height:22px;border-radius:50%;
+    background:#e8e5dd;color:#555;font-size:11px;font-weight:800;
+    display:flex;align-items:center;justify-content:center}
+  .dye-flow li.pay .n{background:var(--ink);color:#fff}
+  .dye-flow li b{font-weight:700}
+  .dye-flow li p{margin:4px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .dye-flow .u{display:inline-block;margin-left:7px;padding:1px 8px;border-radius:999px;
+    font-size:10.5px;font-weight:800;letter-spacing:.04em;vertical-align:middle}
+  .dye-flow .u.kg{background:#fdeded;color:#8d2020}
+  .dye-flow .u.pcs{background:#eff6e9;color:#33571f}
+  .dye-q{margin:16px 0 0;padding:14px 16px;background:#faf9f5;
+    border:1px solid var(--line);border-radius:10px;font-size:12.5px;line-height:1.7}
+  .dye-q .bad{color:#8d2020;font-weight:700}
+  .dye-q .good{color:#33571f;font-weight:700}
+  .dye-q code{background:#fff;border:1px solid var(--line);border-radius:4px;
+    padding:1px 5px;font-size:11.5px}
 </style>
 </head>
 <body>
 
-<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@145)", "images": ["assets/button_000.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@145)", "images": ["assets/button_002.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@145)", "images": ["assets/button_004.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@145)", "images": ["assets/button_001.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007.jpeg"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@155 18MM-@170)", "images": ["assets/button_009.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011.jpeg"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012.jpeg"]}, {"code": "MA-ONL-01", "name": "N83(너트) 단추 + 레이저 로고 + 후염염색", "price": "규격별 단가표 (자연광 코팅)", "images": ["assets/button_013.jpeg"], "priceTable": {"headers": ["규격(M/M)", "단가"], "rows": [["9MM", "135"], ["11MM", "135"], ["13MM", "145"], ["15MM", "170"], ["18MM", "190"], ["20MM", "240"], ["23MM", "320"], ["25MM", "400"], ["28MM", "520"]]}}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014.jpeg"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_015.jpeg"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_016.jpeg"]}, {"code": "MA-HRN-01", "name": "소뿔 단추 (레이저 로고 · 자연광 코팅)", "price": "규격별 단가표 (BK / 진탈 칼라)", "images": [], "priceTable": {"headers": ["규격(M/M)", "BK 칼라", "진탈 칼라"], "rows": [["9MM", "135", "220"], ["11MM", "135", "220"], ["13MM", "140", "230"], ["15MM", "155", "270"], ["18MM", "190", "310"], ["20MM", "240", "350"], ["23MM", "260", "380"], ["25MM", "375", "480"], ["28MM", "540", "750"]]}}, {"code": "", "name": "", "price": "", "images": ["assets/button_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_006.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/button_010.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000.jpeg"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@250)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001.jpeg"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002.jpeg"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@280)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003.jpeg"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@280)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004.jpeg"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@280)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005.jpeg"]}], "METAL": [{"folder": "로고 라벨·장식", "code": "MA-MCL", "items": [{"code": "MA-MCL-LOGO", "name": "마리떼 로고 금속장식", "price": "(@680) 도금기준", "images": ["assets/metal_label_marithe.jpg"]}, {"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013.jpeg"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016.jpeg"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017.jpeg"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019.png"]}, {"code": "MA-MCL-008", "name": "캐스팅 사각 금속 장식", "price": "", "images": ["assets/metal_030.jpeg"]}]}, {"folder": "버클", "code": "MA-MCB", "items": [{"code": "MA-MCB-001", "name": "금형 17MM", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007.png"]}, {"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020.jpeg"]}]}, {"folder": "리벳", "code": "MA-MSR", "items": [{"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004.png"]}, {"code": "MA-MCL-004", "name": "시그니쳐 금속 리벳", "price": "(대금)(캐스팅)", "images": ["assets/metal_014.jpeg"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023.jpeg"]}]}, {"folder": "아일렛·스토퍼·팁·캡", "code": "", "items": [{"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012.png"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015.jpeg"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021.jpeg"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022.jpeg"]}]}, {"folder": "미분류 (정리 예정)", "code": "", "items": [{"code": "", "name": "", "price": "", "images": ["assets/metal_003.png"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_018.jpeg"]}, {"code": "", "name": "", "price": "", "images": ["assets/metal_025.jpeg"]}]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003.jpeg"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004.jpeg"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005.jpeg"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006.jpeg"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007.jpeg"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008.jpeg"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000.jpeg"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001.jpeg"]}, {"code": "", "name": "직기 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "138", "165"], ["25", "160", "210"], ["30", "180", "210"], ["32", "188", "218"], ["35", "205", "235"], ["38", "210", "248"], ["40", "225", "263"], ["45", "263", "293"], ["50", "293", "323"], ["55", "338", "375"], ["62", "390", "428"], ["70", "420", "465"]]}}, {"code": "", "name": "코메즈 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "150", "165"], ["22", "180", "195"], ["25", "180", "210"], ["28", "195", "225"], ["30", "195", "240"], ["32", "210", "255"], ["35", "225", "270"], ["38", "255", "285"], ["40", "270", "300"], ["42", "300", "330"], ["45", "300", "330"], ["47", "330", "375"], ["50", "330", "375"], ["53", "375", "420"], ["55", "375", "420"], ["57", "405", "450"], ["60", "405", "450"], ["63", "450", "495"], ["66", "450", "525"], ["70", "525", "570"]]}}, {"code": "", "name": "코메즈 중간직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "105", "120"], ["22", "120", "135"], ["25", "120", "150"], ["28", "150", "165"], ["30", "150", "165"], ["32", "165", "180"], ["35", "165", "195"], ["38", "180", "210"], ["40", "195", "225"], ["42", "210", "255"], ["45", "210", "255"], ["47", "230", "285"], ["50", "240", "285"], ["53", "270", "300"], ["55", "270", "300"], ["57", "285", "315"], ["60", "285", "315"], ["63", "315", "345"], ["66", "315", "360"], ["70", "420", "450"]]}}], "SNAP": [{"folder": "신주스냅", "code": "MA-MSS", "items": [{"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024.jpeg"]}, {"code": "MA-MSS-LOGO", "name": "마리떼 로고 신주스냅", "price": "(13MM @115 / 15MM @128) 바렐도금", "images": ["assets/snap_mss_logo.jpg"]}]}, {"folder": "캐스팅스냅", "code": "MA-MCS", "items": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001.png"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(13MM)", "images": ["assets/metal_026.jpeg"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고", "price": "(15MM)", "images": ["assets/metal_027.jpeg"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(13MM)", "images": ["assets/metal_028.jpeg"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드(음각로고 금형)", "price": "(15MM)", "images": ["assets/snap_mcs006_a.jpg", "assets/snap_mcs006_b.jpg"]}]}]}</script>
+<script type="application/json" id="initial-data">{"BUTTON": [{"code": "MA-SLW-11", "name": "11.5MM (T/R 테 + LOGO)", "price": "(@140)", "images": ["assets/button_000_clean.png"]}, {"code": "MA-SLW-10", "name": "10MM (T/R테 + LOGO)", "price": "(@140)", "images": ["assets/button_002_clean.png"]}, {"code": "MA-SLB-11", "name": "11.5MM (MOP테 + LOGO)", "price": "(@140)", "images": ["assets/button_004_clean.png"]}, {"code": "MA-SLB-10", "name": "10MM (MOP + LOGO)", "price": "(@140)", "images": ["assets/button_001_clean.png"]}, {"code": "MA-CHL-01", "name": "플라스틱 2H 개발버튼 (15MM/18MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_007_clean.png"]}, {"code": "MA-CHL-02", "name": "플라스틱 4H 로고버튼 (가는테) (10~25MM) W/BK", "price": "(가격 사이즈별 상이)", "images": ["assets/button_005_clean.png"]}, {"code": "MA-CHL-03", "name": "통통테 + LOGO (10~25MM) W염색/BK", "price": "(15MM-@80 18MM-@95)", "images": ["assets/button_008_clean.png"]}, {"code": "MA-MTL-01", "name": "메탈4H 엽전 금형개발버튼 (15MM/18MM)", "price": "(15MM-@160 18MM-@160)", "images": ["assets/button_009_clean.png"]}, {"code": "MA-MTL-02", "name": "메탈꼬다리 로고 금형개발버튼 (18MM)", "price": "(18MM-@350)", "images": ["assets/button_011_clean.png"]}, {"code": "MA-MTL-03", "name": "메탈꼬다리 로고 금형개발버튼(18MM)", "price": "(18MM)", "images": ["assets/button_012_clean.png"]}, {"code": "MA-TRW-01", "name": "자개 장식 + 레이저 로고", "price": "", "images": ["assets/button_014_clean.png"]}, {"code": "MA-TRW-02", "name": "자개 장식 + 레이저 로고 (@600)", "price": "", "images": ["assets/button_015_clean.png"]}, {"code": "MA-TRW-03", "name": "자개 장식 + 레이저 로고 (@600)", "price": "", "images": ["assets/button_016_clean.png"]}, {"code": "MA-HRN-01", "name": "소뿔 단추 (레이저 로고 · 자연광 코팅)", "price": "규격별 단가표 (BK / 진탈 칼라)", "images": [], "priceTable": {"headers": ["규격(M/M)", "BK 칼라", "진탈 칼라"], "rows": [["9MM", "135", "220"], ["11MM", "135", "220"], ["13MM", "140", "230"], ["15MM", "155", "270"], ["18MM", "190", "310"], ["20MM", "240", "350"], ["23MM", "260", "380"], ["25MM", "375", "480"], ["28MM", "540", "750"]]}}, {"code": "MA-ONL-01", "name": "너트단추 + 레이져로고 + 염색,코팅", "price": "규격별 단가표 (자연광 코팅)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가"], "rows": [["9MM", "135"], ["11MM", "135"], ["13MM", "145"], ["15MM", "170"], ["18MM", "190"], ["20MM", "240"], ["23MM", "320"], ["25MM", "400"], ["28MM", "520"]]}}], "SNAP": [{"folder": "스냅 단가표", "code": "", "items": [{"code": "", "name": "스냅 단가표 (26년 02월 견적 · 1SET 기준)", "price": "규격별 단가표", "images": [], "priceTable": {"headers": ["품 명", "도 금", "13MM", "15MM"], "rows": [["히든스냅", "바렐도금", "106", "118"], ["마리떼 로고스냅", "바렐도금", "115", "128"], ["마리떼 로고스냅", "칼라코팅", "139", "153"], ["마리떼 로고 캐스팅 스냅", "바렐도금", "164", "180"], ["마리떼 로고 캐스팅 스냅", "칼라코팅", "199", "216"]]}}]}, {"folder": "신주스냅", "code": "MA-MSS", "items": [{"code": "MA-MSS-001", "name": "A번 금형 헤드", "price": "(신주) 15MM", "images": ["assets/metal_000_clean.png"]}, {"code": "MA-MSS-002", "name": "A번 금형 헤드", "price": "(신주) 13MM", "images": ["assets/metal_010_clean.png"]}, {"code": "MA-MSS-003", "name": "A번 금형 헤드", "price": "(신주) 17MM", "images": ["assets/metal_024_clean.png"]}, {"code": "MA-MSS-LOGO", "name": "마리떼 로고 신주스냅 (바렐도금 13MM @115 · 15MM @128 / 칼라코팅 13MM @139 · 15MM @153)", "price": "(13MM / 15MM)", "images": ["assets/snap_mss_logo_clean.png"]}, {"code": "", "name": "스냅 밑짝 B·C·D", "price": "", "images": ["assets/metal_018_clean.png", "assets/metal_025_clean.png"]}]}, {"folder": "캐스팅스냅", "code": "MA-MCS", "items": [{"code": "MA-MCS-002", "name": "A번 금형 헤드 15MM", "price": "(15MM)", "images": ["assets/metal_009_clean.png"]}, {"code": "MA-MCS-001", "name": "A번 금형 헤드 13MM", "price": "(13MM)", "images": ["assets/metal_001_clean.png"]}, {"code": "MA-MCS-003", "name": "캐스팅 스냅 헤드 + 레이저 로고 (바렐도금 @164 / 칼라코팅 @199)", "price": "(13MM)", "images": ["assets/metal_026_clean.png"]}, {"code": "MA-MCS-004", "name": "캐스팅 스냅 헤드 + 레이저 로고 (바렐도금 @180 / 칼라코팅 @216)", "price": "(15MM)", "images": ["assets/metal_027_clean.png"]}, {"code": "MA-MCS-005", "name": "캐스팅 스냅 헤드 음각로고 금형 (바렐도금 @164 / 칼라코팅 @199)", "price": "(13MM)", "images": ["assets/metal_028_clean.png"]}, {"code": "MA-MCS-006", "name": "캐스팅 스냅 헤드 음각로고 금형 (바렐도금 @180 / 칼라코팅 @216)", "price": "(15MM)", "images": ["assets/snap_mcs006_b_clean.png"]}, {"code": "", "name": "스냅 밑짝 B·C·D", "price": "", "images": ["assets/metal_018_clean.png", "assets/metal_025_clean.png"]}]}], "METAL": [{"folder": "로고 라벨·장식", "code": "MA-MCL", "items": [{"code": "MA-MCL-001", "name": "시그니쳐 금속라벨", "price": "(대금)(신주)", "images": ["assets/metal_002_clean.png"]}, {"code": "MA-MCL-002", "name": "금형 하드웨어 금속라벨", "price": "(니켈무광)걸어도금", "images": ["assets/metal_008_clean.png"]}, {"code": "MA-MCL-003", "name": "시그니쳐 금속라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_013_clean.png"]}, {"code": "MA-MCL-005", "name": "사각 금속 라벨", "price": "(대금)(캐스팅)", "images": ["assets/metal_016_clean.png"]}, {"code": "MA-MCL-006", "name": "시그니쳐 금속 라벨", "price": "(니켈무광)(캐스팅)", "images": ["assets/metal_017_clean.png"]}, {"code": "MA-MCL-007", "name": "아동용 금속 장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_019_clean.png"]}, {"code": "MA-MCL-008", "name": "마리떼 로고 금속장식 (로고 캐스팅 사각)", "price": "도금 칼라별 단가표", "images": ["assets/metal_label_marithe_clean.png"], "priceTable": {"headers": ["도금 칼라", "단가"], "rows": [["니켈 / 흑니켈", "850"], ["니켈무광 / 흑니켈무광", "900"], ["앤틱실버 / 앤틱골드", "800"], ["칼라코팅", "700"], ["사틴 2차가공 시", "각 칼라 +350"]]}}, {"code": "MA-MSR-001", "name": "가시메 리벳+레이져", "price": "", "images": ["assets/metal_004_clean.png"]}, {"code": "MA-MCL-004", "name": "시그니처 금속장식", "price": "(대금)(캐스팅)", "images": ["assets/metal_014_clean.png"]}, {"code": "MA-MCL-009", "name": "양각 로고 장식", "price": "", "images": ["assets/mcl009_clean.png"]}]}, {"folder": "버클", "code": "MA-MCB", "items": [{"code": "MA-MCB-001", "name": "금형 모자 금속버클", "price": "", "images": ["assets/metal_006_clean.png"]}, {"code": "MA-MCB-002", "name": "금형 모자 금속버클 (양각)", "price": "@280", "images": ["assets/buckle_mcb002_clean.png"]}]}, {"folder": "아일렛·스토퍼·팁·캡", "code": "", "items": [{"code": "MA-MSE-001", "name": "금형 아일렛 외경#3 내경#2", "price": "(니켈무광)", "images": ["assets/metal_005_clean.png"]}, {"code": "MA-MST-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_011_clean.png"]}, {"code": "MA-MCT-001", "name": "도금컬러무관", "price": "", "images": ["assets/metal_012_clean.png"]}, {"code": "MA-SSL-002", "name": "플라스틱 도금 로고 스토퍼", "price": "", "images": ["assets/metal_015_clean.png"]}, {"code": "MA-MST-002", "name": "로구로팁 (20*6) + 레이저 로고", "price": "", "images": ["assets/metal_021_clean.png"]}, {"code": "MA-MSC-001", "name": "레이스캡 20MM + 레이저 로고", "price": "", "images": ["assets/metal_022_clean.png"]}]}, {"folder": "캔톤 / 리벳", "code": "", "items": [{"code": "MA-MCB-001", "name": "금형 17MM (@330)", "price": "(캐스팅) 데님 캔톤", "images": ["assets/metal_007_clean.png", "assets/metal_003_clean.png"]}, {"code": "MA-MSB-001", "name": "금형 17MM (@150)", "price": "(신주) 데님 캔톤", "images": ["assets/metal_020_clean.png"]}, {"code": "MA-MSR-002", "name": "로고 모자 리벳 @70", "price": "", "images": ["assets/metal_023_clean.png"]}]}], "STRING&PULLER": [{"code": "MA-ESL-001", "name": "12본엘라스트링 + LOGO (@280)", "price": "", "images": ["assets/string_puller_001_clean.png"]}, {"code": "MA-PSM-001", "name": "32사 중 + LOGO 총알팁 (사이즈별 단가상이)", "price": "", "images": ["assets/string_puller_002_clean.png"]}, {"code": "", "name": "32사 中 스트링", "price": "컬러 - @170 (YD) 면생지 - @140 (YD)", "images": ["assets/string_puller_003_clean.png"]}, {"code": "", "name": "마리떼 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_004_clean.png"]}, {"code": "MA-PIC-001", "name": "날개 파이핑 @200", "price": "", "images": ["assets/string_puller_005_clean.png"]}, {"code": "", "name": "성인 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_006_clean.png"]}, {"code": "", "name": "아동용 로고 지퍼 풀러 (테이프)", "price": "검정 @280 칼라 @400", "images": ["assets/string_puller_007_clean.png"]}, {"code": "", "name": "마리떼 스포츠 로고 지퍼 풀러 (3M 스트링)", "price": "검정 @160 칼라 @400", "images": ["assets/string_puller_008_clean.png"]}], "LEATHER PATCH": [{"code": "MA-MLP-001", "name": "LOGO LEATHER PATCH (@200)", "price": "(43MM*20.6MM)", "images": ["assets/leather_patch_000_clean.png"]}, {"code": "MA-MLP-002", "name": "LOGO LEATHER PATCH (@280)", "price": "(55MM*28MM)", "images": ["assets/leather_patch_001_clean.png"]}, {"code": "MA-MLT-001", "name": "LOGO LEATHER TIP (1EA @675)", "price": "", "images": ["assets/leather_patch_002_clean.png"]}, {"code": "MA-MLP-003", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(60MM*35MM)", "images": ["assets/leather_patch_003_clean.png"]}, {"code": "MA-MLP-004", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(50MM*35MM)", "images": ["assets/leather_patch_004_clean.png"]}, {"code": "MA-MLP-005", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_005_clean.png"]}, {"code": "MA-MLP-006", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(70MM*48MM)", "images": ["assets/leather_patch_006_clean.png"]}, {"code": "MA-MLP-007 (정지은 대리님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(35MM*23MM)", "images": ["assets/leather_patch_007_clean.png"]}, {"code": "MA-MLP-008 (송혜성 과장님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_008_clean.png"]}, {"code": "MA-MLP-009 (노민아 과장님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(35MM*20MM)", "images": ["assets/leather_patch_009_clean.png"]}, {"code": "MA-MLP-010 (조은혜 대리님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(20MM*15MM)", "images": ["assets/leather_patch_010_clean.png"]}, {"code": "MA-MLP-011 (조은혜 대리님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(45MM*30MM)", "images": ["assets/leather_patch_011_clean.png"]}, {"code": "MA-MLP-012 (박정우님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(33MM*23MM)", "images": ["assets/leather_patch_012_clean.png"]}, {"code": "MA-MLP-013 (박정우님)", "name": "LOGO LEATHER PATCH (@280 / 기리메 작업 시 @200 추가)", "price": "(41MM*30MM)", "images": ["assets/leather_patch_013_clean.png"]}], "BAND": [{"code": "MA-13WB", "name": "불박 로고 MC 밴드", "price": "MC＿13MM", "images": ["assets/band_000_clean.png"]}, {"code": "MA-35WB＿PRESS-35MM", "name": "불박 로고 밴드", "price": "", "images": ["assets/band_001_clean.png"]}, {"code": "", "name": "직기 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "138", "165"], ["25", "160", "210"], ["30", "180", "210"], ["32", "188", "218"], ["35", "205", "235"], ["38", "210", "248"], ["40", "225", "263"], ["45", "263", "293"], ["50", "293", "323"], ["55", "338", "375"], ["62", "390", "428"], ["70", "420", "465"]]}}, {"code": "", "name": "코메즈 이중직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "150", "165"], ["22", "180", "195"], ["25", "180", "210"], ["28", "195", "225"], ["30", "195", "240"], ["32", "210", "255"], ["35", "225", "270"], ["38", "255", "285"], ["40", "270", "300"], ["42", "300", "330"], ["45", "300", "330"], ["47", "330", "375"], ["50", "330", "375"], ["53", "375", "420"], ["55", "375", "420"], ["57", "405", "450"], ["60", "405", "450"], ["63", "450", "495"], ["66", "450", "525"], ["70", "525", "570"]]}}, {"code": "", "name": "코메즈 중간직", "price": "규격별 단가표 (WHITE / BLACK · YD)", "images": [], "priceTable": {"headers": ["규격(M/M)", "단가 (WHITE / YD)", "단가 (BLACK / YD)"], "rows": [["20", "105", "120"], ["22", "120", "135"], ["25", "120", "150"], ["28", "150", "165"], ["30", "150", "165"], ["32", "165", "180"], ["35", "165", "195"], ["38", "180", "210"], ["40", "195", "225"], ["42", "210", "255"], ["45", "210", "255"], ["47", "230", "285"], ["50", "240", "285"], ["53", "270", "300"], ["55", "270", "300"], ["57", "285", "315"], ["60", "285", "315"], ["63", "315", "345"], ["66", "315", "360"], ["70", "420", "450"]]}}], "_dyeing": {"note": "염색비 계산기. 1롤=200yd 고정. rollKg = 야드당g × 200 ÷ 1000.", "fee": {"baseWon": 120000, "baseKg": 10, "overWonPerKg": 15000, "roundUpKg": 1}, "defaults": {"cutCm": 135, "shrinkPct": 0}, "items": [{"name": "32사 중자 생지", "rollYd": 200, "rollKg": 1.26}, {"name": "48사 3합 생지", "rollYd": 200, "rollKg": 0.98}, {"name": "32사 4합 생지", "rollYd": 200, "rollKg": 0.88}, {"name": "32사 7합", "rollYd": 200, "rollKg": 1.58}, {"name": "3합 속심", "rollYd": 200, "rollKg": 1.1}, {"name": "6합 속심", "rollYd": 200, "rollKg": 1.8}, {"name": "10미리 23수", "rollYd": 200, "rollKg": 0.64}]}}</script>
 
 <header class="brand-bar">
   <div class="bar-row">
@@ -633,7 +722,9 @@ const INITIAL_DATA_FALLBACK = JSON.parse(document.getElementById('initial-data')
 
 /* ====== STATE ====== */
 const STORAGE_KEY = 'marithe_material_v1';
-let CATEGORIES = Object.keys(INITIAL_DATA_FALLBACK);
+// '_' 로 시작하는 키는 카테고리가 아니라 설정 블록(_dyeing 등) — 탭/엑셀에서 제외
+const catKeys = o => Object.keys(o).filter(k => k[0] !== '_');
+let CATEGORIES = catKeys(INITIAL_DATA_FALLBACK);
 let state = JSON.parse(JSON.stringify(INITIAL_DATA_FALLBACK)); // 초기값, 곧 덮어씀
 let currentTab = CATEGORIES[0];
 let currentFolder = null; // (구) 드릴다운용 — 이제 섹션뷰라 뷰에선 항상 null 유지
@@ -867,6 +958,13 @@ function renderTabs(){
     b.addEventListener('click', () => { currentTab = cat; currentFolder = null; renderTabs(); renderGrid(); updateSaveBar(); });
     tabsEl.appendChild(b);
   }
+  // 염색비 계산기 탭 (자재 카테고리가 아니라 도구 — 맨 끝에 붙임)
+  const d = document.createElement('button');
+  d.textContent = DYE_TAB;
+  d.dataset.tab = DYE_TAB;
+  if(currentTab === DYE_TAB) d.classList.add('active');
+  d.addEventListener('click', () => { currentTab = DYE_TAB; currentFolder = null; renderTabs(); renderGrid(); updateSaveBar(); });
+  tabsEl.appendChild(d);
 }
 
 function updateSaveBar(){
@@ -875,6 +973,9 @@ function updateSaveBar(){
 }
 
 function renderGrid(){
+  // 염색비 탭은 자재 그리드가 아니라 계산기 — 검색/저장바 숨기고 분기
+  document.body.classList.toggle('on-dye', currentTab === DYE_TAB);
+  if(currentTab === DYE_TAB){ gridEl.innerHTML = ''; renderDyeCalc(); return; }
   gridEl.innerHTML = '';
   const q = (searchEl.value || '').trim().toLowerCase();
   const folderTab = isFolderCat(currentTab);
@@ -1503,6 +1604,288 @@ document.addEventListener('keydown', e => {
   }
 });
 
+
+/* ====== 염색비 계산기 ======
+   과금 단위가 공정마다 다르다:
+     염색 = 무게(kg)  /  팁작업 = 개수(pcs)
+   염색은 롤을 통째로 넣으므로 "개수"는 염색 다음 공정(재단)에서 처음 생긴다.
+   → 개수 주문이 들어오면 개수 → 길이 → 롤 수(올림) → 무게 로 역산해야 염색비가 나온다. */
+const DYE_TAB = '🧮 염색비';
+const YD_CM = 91.44;
+let dyeUI = null;
+
+function dyeCfg(){
+  const d = (state && state._dyeing) || {};
+  return {
+    fee: Object.assign({baseWon:120000, baseKg:10, overWonPerKg:15000}, d.fee || {}),
+    def: Object.assign({cutCm:135, shrinkPct:0}, d.defaults || {}),
+    items: (Array.isArray(d.items) ? d.items : []).filter(x => x && x.rollKg > 0)
+  };
+}
+const kg3    = v => Math.round(v * 1000) / 1000;   // 부동소수 오차 정리 (9.000000002 → 9)
+const ceilKg = v => Math.ceil(kg3(v) - 1e-9);
+const fmtWon = n => Math.round(n).toLocaleString('ko-KR');
+const fmtNum = n => Math.round(n).toLocaleString('ko-KR');
+const fmtKg  = v => kg3(v).toFixed(2);
+
+/* 염색비 — baseKg(10kg)까지는 정액, 초과분만 1kg 단위 올림 과금 */
+function dyeFee(totalKg, fee){
+  const over = Math.max(0, ceilKg(totalKg) - fee.baseKg);
+  return { over, billKg: fee.baseKg + over, won: fee.baseWon + over * fee.overWonPerKg };
+}
+/* 1롤에서 나오는 개수 — 염색 수축으로 길이가 줄면 개수도 줄어든다 (염색비는 투입 무게라 안 변함) */
+function dyePcsPerRoll(it, cutCm, shrinkPct){
+  const yd = (it.rollYd || 200) * (1 - (shrinkPct || 0) / 100);
+  return cutCm > 0 ? Math.max(0, Math.floor(yd * YD_CM / cutCm)) : 0;
+}
+/* 기본요금(10kg) 안에 들어가는 최대 롤 수 */
+function dyeMaxRolls(rollKg, fee){ return Math.max(1, Math.floor(kg3(fee.baseKg / rollKg) + 1e-9)); }
+/* 여러 번 나눠 보낼 때 최저가 조합 (앞 배치는 10kg까지 꽉 채우고 마지막 배치에 나머지) */
+function dyeBestSplit(rolls, rollKg, fee){
+  const per = dyeMaxRolls(rollKg, fee);
+  let best = null;
+  for(let n = 1; n <= Math.ceil(rolls / per); n++){
+    const last = rolls - Math.min(per * (n - 1), rolls);
+    if(last <= 0) break;
+    const w = (n - 1) * fee.baseWon + dyeFee(last * rollKg, fee).won;
+    if(!best || w < best.won) best = { n, won: w, per, last };
+  }
+  return best;
+}
+
+function renderDyeCalc(){
+  const c = dyeCfg();
+  if(!c.items.length){
+    infoEl.textContent = '';
+    gridEl.innerHTML = '<div class="dye-card"><h3>염색비 계산기</h3>'
+      + '<div class="dye-tip warn">염색비 데이터를 불러오지 못했습니다. ⌘+⇧+R 로 새로고침해 주세요.</div></div>';
+    return;
+  }
+  if(!dyeUI) dyeUI = { idx:0, mode:'pcs', rolls:dyeMaxRolls(c.items[0].rollKg, c.fee),
+                       pcs:1000, cutCm:c.def.cutCm, shrink:c.def.shrinkPct };
+  if(dyeUI.idx >= c.items.length) dyeUI.idx = 0;
+  const it = c.items[dyeUI.idx], rollYd = it.rollYd || 200;
+  infoEl.textContent = `1롤 ${rollYd}yd 고정 · 염색 ${fmtWon(c.fee.baseWon)}원 / ${c.fee.baseKg}kg · 초과 kg당 ${fmtWon(c.fee.overWonPerKg)}원`;
+
+  gridEl.innerHTML = `
+  <div class="dye-wrap">
+    <div class="dye-top">
+      <section class="dye-card">
+        <h3>① 입력</h3>
+        <div class="dye-row"><label>품목</label>
+          <select id="dye-item">${c.items.map((x,i) =>
+            `<option value="${i}"${i===dyeUI.idx?' selected':''}>${escapeHtml(x.name)} — ${fmtKg(x.rollKg)}kg/롤</option>`
+          ).join('')}</select></div>
+        <div class="dye-mode">
+          <button type="button" data-mode="pcs"${dyeUI.mode==='pcs'?' class="on"':''}>필요 개수로 계산</button>
+          <button type="button" data-mode="rolls"${dyeUI.mode==='rolls'?' class="on"':''}>롤 수로 계산</button>
+        </div>
+        <div class="dye-row"${dyeUI.mode==='pcs'?'':' hidden'}>
+          <label>필요 개수</label>
+          <input type="number" id="dye-pcs" min="1" step="10" value="${dyeUI.pcs}"><span class="u">개</span></div>
+        <div class="dye-row"${dyeUI.mode==='rolls'?'':' hidden'}>
+          <label>롤 수</label>
+          <input type="number" id="dye-rolls" min="1" step="1" value="${dyeUI.rolls}"><span class="u">롤 &middot; ${rollYd}yd</span></div>
+        <hr class="dye-sep">
+        <div class="dye-row"><label>재단길이</label>
+          <input type="number" id="dye-cut" min="1" step="1" value="${dyeUI.cutCm}"><span class="u">cm / 1개</span></div>
+        <div class="dye-row"><label>염색 수축</label>
+          <input type="number" id="dye-shrink" min="0" max="30" step="0.5" value="${dyeUI.shrink}"><span class="u">%</span></div>
+        <div class="dye-row"><span class="hint">수축률을 넣으면 나오는 개수만 줄어듭니다 (염색비는 투입 무게 기준이라 불변)</span></div>
+      </section>
+      <section class="dye-card" id="dye-out"></section>
+    </div>
+    <section class="dye-card">
+      <h3>② 품목별 기준표 — <em>기본요금 ${fmtWon(c.fee.baseWon)}원으로 뽑을 수 있는 최대치</em></h3>
+      <div class="dye-scroll" id="dye-table"></div>
+    </section>
+    <section class="dye-card">
+      <details class="dye-help">
+        <summary>③ 공정 순서와 과금 단위 — 왜 개수만으로 염색비를 구할 수 없나 (신입 교육용)</summary>
+        ${dyeHelpHtml(c)}
+      </details>
+    </section>
+  </div>`;
+
+  const sel = gridEl.querySelector('#dye-item');
+  sel.addEventListener('change', () => { dyeUI.idx = +sel.value; renderDyeCalc(); });
+  gridEl.querySelectorAll('.dye-mode button').forEach(b =>
+    b.addEventListener('click', () => { dyeUI.mode = b.dataset.mode; renderDyeCalc(); }));
+  const bindNum = (id, key, min, fb) => {
+    const el = gridEl.querySelector(id); if(!el) return;
+    el.addEventListener('input', () => {
+      const v = parseFloat(el.value);
+      dyeUI[key] = (isFinite(v) && v >= min) ? v : fb;
+      dyeRecalc();
+    });
+  };
+  bindNum('#dye-pcs','pcs',1,1);
+  bindNum('#dye-rolls','rolls',1,1);
+  bindNum('#dye-cut','cutCm',1,c.def.cutCm);
+  bindNum('#dye-shrink','shrink',0,0);
+
+  dyeRecalc();
+  renderDyeTable();
+}
+
+function dyeRecalc(){
+  const out = gridEl.querySelector('#dye-out'); if(!out) return;
+  const c = dyeCfg(), fee = c.fee, it = c.items[dyeUI.idx];
+  const cutCm  = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+  const shrink = dyeUI.shrink >= 0 ? dyeUI.shrink : 0;
+  const rollYd = it.rollYd || 200;
+
+  const perRoll = dyePcsPerRoll(it, cutCm, shrink);
+  const needPcs = Math.max(1, Math.round(dyeUI.pcs));
+  const needYd  = needPcs * cutCm / YD_CM;
+  const rawRolls = rollYd > 0 ? needYd / (rollYd * (1 - shrink/100)) : 0;
+
+  const rolls    = dyeUI.mode === 'pcs'
+                 ? (perRoll > 0 ? Math.ceil(needPcs / perRoll) : 0)
+                 : Math.max(1, Math.round(dyeUI.rolls));
+  const totalKg  = kg3(rolls * it.rollKg);
+  const f        = dyeFee(totalKg, fee);
+  const totalPcs = rolls * perRoll;
+  const perPcs   = totalPcs > 0 ? f.won / totalPcs : 0;
+  const maxRolls = dyeMaxRolls(it.rollKg, fee);
+
+  /* ----- 계산 흐름 (숫자를 그대로 보여줘서 검산 가능하게) ----- */
+  let chain = '';
+  if(dyeUI.mode === 'pcs'){
+    chain = `<b>${fmtNum(needPcs)}개</b> × ${cutCm}cm = ${fmtNum(needPcs*cutCm)}cm = <b>${needYd.toFixed(1)}yd</b><br>`
+          + `${needYd.toFixed(1)}yd ÷ ${rollYd}yd${shrink>0?` (수축 ${shrink}% 반영)`:''} = ${rawRolls.toFixed(2)}롤 → 롤은 쪼갤 수 없으니 올림 <b>${rolls}롤</b><br>`
+          + `${rolls}롤 × ${fmtKg(it.rollKg)}kg = <b>${fmtKg(totalKg)}kg</b> → 청구 <b>${f.billKg}kg</b><br>`
+          + `${rolls}롤 × ${fmtNum(perRoll)}개 = <b>${fmtNum(totalPcs)}개</b>`
+          + (totalPcs>needPcs ? ` (주문보다 ${fmtNum(totalPcs-needPcs)}개 더 나옴)` : '');
+  }else{
+    chain = `<b>${rolls}롤</b> × ${rollYd}yd = ${fmtNum(rolls*rollYd)}yd${shrink>0?` → 수축 ${shrink}% 후 ${fmtNum(Math.round(rolls*rollYd*(1-shrink/100)))}yd`:''}<br>`
+          + `÷ ${cutCm}cm = 롤당 <b>${fmtNum(perRoll)}개</b> → 총 <b>${fmtNum(totalPcs)}개</b><br>`
+          + `${rolls}롤 × ${fmtKg(it.rollKg)}kg = <b>${fmtKg(totalKg)}kg</b> → 청구 <b>${f.billKg}kg</b>`;
+  }
+
+  /* ----- 여유 / 경고 ----- */
+  const pct = Math.min(100, totalKg / fee.baseKg * 100);
+  const overBase = totalKg > fee.baseKg;
+  let tips = '';
+
+  if(!overBase){
+    const room = kg3(fee.baseKg - totalKg);
+    const addRolls = Math.floor(kg3(room / it.rollKg) + 1e-9);
+    if(addRolls >= 1){
+      tips += `<div class="dye-tip ok">💡 <b>${fmtKg(room)}kg 여유</b> — 같은 염색비 ${fmtWon(fee.baseWon)}원으로 `
+            + `<span class="big">${addRolls}롤 (${fmtNum(addRolls*perRoll)}개)</span> 더 넣을 수 있습니다.<br>`
+            + `지금 개당 ${fmtWon(perPcs)}원 → 꽉 채우면 개당 <b>${fmtWon(fee.baseWon/((rolls+addRolls)*perRoll))}원</b>`
+            + ` (${Math.round((1 - (fee.baseWon/((rolls+addRolls)*perRoll))/perPcs)*100)}% 절감)</div>`;
+    }else{
+      tips += `<div class="dye-tip ok">✅ 기본요금 구간을 거의 꽉 채웠습니다. 개당 염색비 최적 상태.</div>`;
+    }
+  }else{
+    const saving = f.won - fee.baseWon;
+    const shortPcs = totalPcs - maxRolls * perRoll;
+    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(totalKg - fee.baseKg)}kg 초과</b> → 초과 ${f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(f.won - fee.baseWon)}원</b><br>`
+          + `<b>${maxRolls}롤(${fmtNum(maxRolls*perRoll)}개)</b>로 줄이면 ${fmtWon(fee.baseWon)}원 — <span class="big">${fmtWon(saving)}원 절약</span>`
+          + (shortPcs > 0 ? `. 단 ${fmtNum(shortPcs)}개 줄어듭니다.` : '.') + `</div>`;
+    const best = dyeBestSplit(rolls, it.rollKg, fee);
+    if(best && best.n > 1 && best.won < f.won){
+      tips += `<div class="dye-tip info">📦 수량을 유지하려면 <b>${best.n}회로 나눠</b> 염색 의뢰: `
+            + `${fmtWon(best.won)}원 (<b>${fmtWon(f.won - best.won)}원 절약</b>)<br>`
+            + `배분 — ${best.per}롤씩 ${best.n-1}회 + 마지막 ${best.last}롤`
+            + `<br><span style="opacity:.75">기본요금이 ${fmtWon(fee.baseWon)}원인데 초과 단가(kg당 ${fmtWon(fee.overWonPerKg)}원)가 기본 단가(kg당 ${fmtWon(fee.baseWon/fee.baseKg)}원)보다 비싸서 생기는 현상입니다.</span></div>`;
+    }
+  }
+
+  out.innerHTML = `
+    <h3>② 결과 — <em>${escapeHtml(it.name)}</em></h3>
+    <div class="dye-kpi">
+      <div><div class="k">투입 롤</div><div class="v">${fmtNum(rolls)}<s>롤</s></div></div>
+      <div><div class="k">투입 중량</div><div class="v">${fmtKg(totalKg)}<s>kg</s></div></div>
+      <div><div class="k">청구 중량</div><div class="v">${f.billKg}<s>kg</s></div></div>
+      <div class="big"><div class="k">염색비</div><div class="v">${fmtWon(f.won)}<s>원</s></div></div>
+      <div><div class="k">나오는 개수</div><div class="v">${fmtNum(totalPcs)}<s>개</s></div></div>
+      <div><div class="k">개당 염색비</div><div class="v">${fmtWon(perPcs)}<s>원</s></div></div>
+    </div>
+    <div class="dye-gauge-wrap">
+      <div class="dye-gauge"><i style="width:${pct}%;background:${overBase?'#c0392b':(pct>85?'#5b8a3c':'#8fae6e')}"></i></div>
+      <div class="dye-gauge-lbl"><span>${fmtKg(totalKg)}kg 투입</span><span>기본요금 한도 ${fee.baseKg}kg</span></div>
+    </div>
+    ${tips}
+    <div class="dye-chain">${chain}</div>`;
+}
+
+function renderDyeTable(){
+  const host = gridEl.querySelector('#dye-table'); if(!host) return;
+  const c = dyeCfg(), fee = c.fee;
+  const cutCm  = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+  const shrink = dyeUI.shrink >= 0 ? dyeUI.shrink : 0;
+  const rows = c.items.map((it,i) => {
+    const per = dyePcsPerRoll(it, cutCm, shrink);
+    const mr  = dyeMaxRolls(it.rollKg, fee);
+    const kg  = kg3(mr * it.rollKg);
+    const pcs = mr * per;
+    return `<tr data-i="${i}"${i===dyeUI.idx?' class="sel"':''}>
+      <td>${escapeHtml(it.name)}</td>
+      <td>${fmtKg(it.rollKg)}</td>
+      <td>${fmtNum(per)}</td>
+      <td class="em">${mr}</td>
+      <td>${fmtKg(kg)}</td>
+      <td class="em">${fmtNum(pcs)}</td>
+      <td>${fmtWon(fee.baseWon)}</td>
+      <td class="em">${fmtWon(fee.baseWon/pcs)}</td></tr>`;
+  }).join('');
+  host.innerHTML = `<table class="dyetab">
+    <thead><tr>
+      <th>품목</th><th>롤 무게(kg)</th><th>롤당 개수</th><th>최대 롤</th>
+      <th>투입 중량</th><th>총 개수</th><th>염색비</th><th>개당</th>
+    </tr></thead><tbody>${rows}</tbody></table>
+    <div class="dye-row" style="margin:12px 0 0"><span class="hint" style="margin:0">
+      재단길이 ${cutCm}cm${shrink>0?` · 수축 ${shrink}%`:''} 기준 · 행을 클릭하면 그 조건으로 계산합니다</span></div>`;
+  host.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
+    const i = +tr.dataset.i;
+    dyeUI.idx = i;
+    dyeUI.mode = 'rolls';
+    dyeUI.rolls = dyeMaxRolls(c.items[i].rollKg, fee);
+    renderDyeCalc();
+  }));
+}
+
+function dyeHelpHtml(c){
+  const fee = c.fee, it = c.items[0] || {name:'스트링', rollKg:1.26, rollYd:200};
+  const cut = c.def.cutCm;
+  const per = dyePcsPerRoll(it, cut, 0);
+  const mr  = dyeMaxRolls(it.rollKg, fee);
+  const kgPerBase = fee.baseWon / fee.baseKg;
+  return `
+  <div class="dye-tip info" style="margin:0 0 16px">
+    <b>핵심 한 줄</b> — 염색은 <b>무게(kg)</b>로 돈을 받고, 팁작업은 <b>개수(개)</b>로 돈을 받습니다.
+    공정을 지나가면서 과금 단위가 바뀝니다.
+  </div>
+  <ol class="dye-flow">
+    <li><span class="n">1</span><b>생지 롤 입고</b> — 1롤 ${it.rollYd||200}yd
+      <p>이 상태에서는 "개"라는 개념이 없습니다. 롤과 무게만 있습니다.</p></li>
+    <li class="pay"><span class="n">2</span><b>염색</b><span class="u kg">과금 = kg</span>
+      <p>롤을 통째로 넣습니다. 쪼개서 보낼 수 없으므로 필요량이 3.7롤이면 <b>4롤</b>을 보내야 합니다.
+      ${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액, 초과분은 1kg 단위로 올려서 kg당 ${fmtWon(fee.overWonPerKg)}원.</p></li>
+    <li><span class="n">3</span><b>재단 (${cut}cm씩 자르기)</b>
+      <p>여기서 처음으로 개수가 생깁니다. ${it.rollYd||200}yd × 91.44 = ${fmtNum((it.rollYd||200)*YD_CM)}cm ÷ ${cut}cm = <b>${per}개</b> (나머지는 자투리).
+      개수는 <b>길이</b>로만 결정되고 무게와 무관합니다 — 두 단위가 따로 움직인다는 증거입니다.</p></li>
+    <li class="pay"><span class="n">4</span><b>팁작업</b><span class="u pcs">과금 = 개</span>
+      <p>염색이 끝난 뒤의 공정이므로, 팁 수량은 염색비를 정한 다음에 정해집니다.</p></li>
+  </ol>
+  <div class="dye-q">
+    <span class="bad">❌ "1,000개 주문이니까 염색비도 1,000개로 계산하죠?"</span><br>
+    염색 단계에서는 아직 개수가 존재하지 않습니다. 저울에 올라간 무게만 보고 금액이 정해집니다.
+    <hr class="dye-sep">
+    <span class="good">✅ 거꾸로 역산합니다</span><br>
+    <code>필요 개수 → ×재단길이 → 총 길이(yd) → ÷롤 길이 → 올림 → 롤 수 → ×롤 무게 → kg → 염색비</code>
+    <hr class="dye-sep">
+    <b>그래서 생기는 함정 2개</b><br>
+    ① <b>적게 보내면 개당 단가가 폭등</b> — ${fee.baseKg}kg 미만도 ${fmtWon(fee.baseWon)}원 정액입니다.
+    절반만 채우면 kg당 단가가 2배가 됩니다 (꽉 채우면 kg당 ${fmtWon(kgPerBase)}원).<br>
+    ② <b>살짝 넘기면 ${fmtWon(fee.overWonPerKg)}원이 한 번에 붙음</b> — 1kg 단위 올림이라
+    100g만 초과해도 1kg으로 청구됩니다. 위 계산기가 이 두 경우를 자동으로 잡아줍니다.
+  </div>`;
+}
+
 /* ====== INIT ====== */
 async function init(){
   // viewer / admin 모두 GitHub raw에서 최신 data 가져옴
@@ -1510,7 +1893,7 @@ async function init(){
   toast('데이터 불러오는 중…');
   const remote = await fetchRemoteData();
   state = remote;
-  CATEGORIES = Object.keys(state);
+  CATEGORIES = catKeys(state);
   currentTab = CATEGORIES[0];
 
   // admin이면서 localStorage에 dirty 백업이 있으면 복구 옵션 제공
@@ -1526,7 +1909,7 @@ async function init(){
       );
       if(useLocal){
         state = cached;
-        CATEGORIES = Object.keys(state);
+        CATEGORIES = catKeys(state);
         currentTab = CATEGORIES[0];
         setDirty(true);
       }else{
