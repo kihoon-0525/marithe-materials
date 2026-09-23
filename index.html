@@ -481,6 +481,11 @@
   .dye-kpi>div.big .k{color:rgba(255,255,255,.55)}
   .dye-kpi>div.big .v{color:#fff}
   .dye-kpi>div.big .v s{color:rgba(255,255,255,.5)}
+  /* 개당/yd당 염색비 — 실무에서 제일 많이 보는 값이라 별도 강조 */
+  .dye-kpi>div.hi{background:#456f2c}
+  .dye-kpi>div.hi .k{color:rgba(255,255,255,.6)}
+  .dye-kpi>div.hi .v{color:#fff}
+  .dye-kpi>div.hi .v s{color:rgba(255,255,255,.55)}
   .dye-gauge-wrap{margin:16px 0 0}
   .dye-gauge{height:9px;border-radius:999px;background:#ece9e1;overflow:hidden}
   .dye-gauge i{display:block;height:100%;border-radius:999px}
@@ -1795,7 +1800,7 @@ function dyeRecalc(){
       <div><div class="k">청구 중량</div><div class="v">${f.billKg}<s>kg</s></div></div>
       <div class="big"><div class="k">염색비</div><div class="v">${fmtWon(f.won)}<s>원</s></div></div>
       <div><div class="k">나오는 수량</div><div class="v">${fmtNum(totalQty)}<s>${U}</s></div></div>
-      <div><div class="k">${U}당 염색비</div><div class="v">${fmtWon(perQty)}<s>원</s></div></div>
+      <div class="hi"><div class="k">${U}당 염색비</div><div class="v">${fmtWon(perQty)}<s>원</s></div></div>
     </div>
     <div class="dye-gauge-wrap">
       <div class="dye-gauge"><i style="width:${pct}%;background:${overBase?'#c0392b':(pct>85?'#5b8a3c':'#8fae6e')}"></i></div>
