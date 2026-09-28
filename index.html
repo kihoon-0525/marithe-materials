@@ -1667,10 +1667,10 @@ function dyeQtyPerRoll(it, cutCm){
   if(dyeIsYd(it)) return it.rollYd || 200;
   return cutCm > 0 ? Math.max(0, Math.floor((it.rollYd || 200) * YD_CM / cutCm)) : 0;
 }
-/* 출고 형태 — 'roll'이면 재단 없이 롤 그대로 나가므로 수량을 롤로 센다 */
+/* 출고 형태 — 'roll'이면 재단 없이 롤 그대로 나가므로 길이(yd)로 센다 */
 const dyeIsRoll = ship => ship === 'roll';
-const dyeShipU  = (it, ship) => dyeIsRoll(ship) ? '롤' : dyeU(it);
-const dyeShipQtyPerRoll = (it, ship, cutCm) => dyeIsRoll(ship) ? 1 : dyeQtyPerRoll(it, cutCm);
+const dyeShipU  = (it, ship) => dyeIsRoll(ship) ? 'yd' : dyeU(it);
+const dyeShipQtyPerRoll = (it, ship, cutCm) => dyeIsRoll(ship) ? (it.rollYd || 200) : dyeQtyPerRoll(it, cutCm);
 const dyeShipLabel = (it, ship, cut) => dyeIsRoll(ship) ? '롤 그대로' : (dyeIsYd(it) ? '길이(yd)' : `${cut}cm 재단`);
 /* 기본요금(10kg) 안에 들어가는 최대 롤 수 */
 function dyeMaxRolls(rollKg, fee){ return Math.max(1, Math.floor(kg3(fee.baseKg / rollKg) + 1e-9)); }
@@ -1725,11 +1725,9 @@ function dyeCombo(rows, c, defCut){
             : (totalKg > 0 ? Math.round(f.won * p.kg / totalKg) : 0);
     acc += p.share;
     p.per   = p.qty > 0 ? p.share / p.qty : 0;   // 출고 단위당 (개 / 롤 / yd)
-    p.perYd = p.yd  > 0 ? p.share / p.yd  : 0;   // yd당 — 단위 무관 비교용
     // 같은 수량을 이 품목만 따로 염색했다면?
     const alone = dyeFee(p.kg, fee);
     p.aloneWon = alone.won;
-    p.alonePer = p.qty > 0 ? alone.won / p.qty : 0;
   });
   const separateWon = parts.reduce((s,p) => s + p.aloneWon, 0);
   return { parts, totalKg, totalRolls, f, separateWon, saving: separateWon - f.won };
@@ -1788,7 +1786,7 @@ function renderDyeCalc(){
         ${(isYd || roll) ? '' : `<hr class="dye-sep">
         <div class="dye-row"><label>재단길이</label>
           <input type="number" id="dye-cut" min="1" step="1" value="${dyeUI.cutCm}"><span class="u">cm / 1개</span></div>`}
-        <div class="dye-row"><span class="hint">${roll ? '재단 없이 롤째 나가는 경우입니다. 단가는 롤당으로 계산됩니다' : '롤은 쪼개서 염색 보낼 수 없어 필요량은 항상 롤 단위로 올림됩니다'}</span></div>
+        <div class="dye-row"><span class="hint">${roll ? '재단 없이 롤째 나가는 경우입니다. 단가는 yd당으로 계산됩니다' : '롤은 쪼개서 염색 보낼 수 없어 필요량은 항상 롤 단위로 올림됩니다'}</span></div>
       </section>
       <section class="dye-card" id="dye-out"></section>
     </div>
@@ -1861,7 +1859,7 @@ function dyeRecalc(){
     chain = `<b>${rolls}롤</b> × ${rollYd}yd = <b>${fmtNum(rolls*rollYd)}yd</b><br>`
           + ((isYd || roll) ? '' : `÷ ${cutCm}cm = 롤당 <b>${fmtNum(perRoll)}개</b> → 총 <b>${fmtNum(totalQty)}개</b><br>`)
           + `${rolls}롤 × ${fmtKg(it.rollKg)}kg = <b>${fmtKg(totalKg)}kg</b> → 청구 <b>${f.billKg}kg</b>`
-          + (roll ? `<br>재단 없이 롤째 출고 → 염색비 ${fmtWon(f.won)}원 ÷ ${rolls}롤 = 롤당 <b>${fmtWon(perQty)}원</b>` : '');
+          + (roll ? `<br>재단 없이 롤째 출고 → 염색비 ${fmtWon(f.won)}원 ÷ ${fmtNum(totalQty)}yd = yd당 <b>${fmtWon(perQty)}원</b>` : '');
   }
 
   /* ----- 여유 / 경고 ----- */
@@ -1874,7 +1872,7 @@ function dyeRecalc(){
     const addRolls = Math.floor(kg3(room / it.rollKg) + 1e-9);
     if(addRolls >= 1){
       tips += `<div class="dye-tip ok">💡 <b>${fmtKg(room)}kg 여유</b> — 같은 염색비 ${fmtWon(fee.baseWon)}원으로 `
-            + `<span class="big">${addRolls}롤${roll ? '' : ` (${fmtNum(addRolls*perRoll)}${U})`}</span> 더 넣을 수 있습니다.<br>`
+            + `<span class="big">${addRolls}롤 (${fmtNum(addRolls*perRoll)}${U})</span> 더 넣을 수 있습니다.<br>`
             + `지금 ${U}당 ${fmtWon(perQty)}원 → 꽉 채우면 ${U}당 <b>${fmtWon(fee.baseWon/((rolls+addRolls)*perRoll))}원</b>`
             + ` (${Math.round((1 - (fee.baseWon/((rolls+addRolls)*perRoll))/perQty)*100)}% 절감)</div>`;
     }else{
@@ -1884,7 +1882,7 @@ function dyeRecalc(){
     const saving = f.won - fee.baseWon;
     const shortQty = totalQty - maxRolls * perRoll;
     tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(totalKg - fee.baseKg)}kg 초과</b> → 초과 ${f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(f.won - fee.baseWon)}원</b><br>`
-          + `<b>${maxRolls}롤${roll ? '' : `(${fmtNum(maxRolls*perRoll)}${U})`}</b>로 줄이면 ${fmtWon(fee.baseWon)}원 — <span class="big">${fmtWon(saving)}원 절약</span>`
+          + `<b>${maxRolls}롤(${fmtNum(maxRolls*perRoll)}${U})</b>로 줄이면 ${fmtWon(fee.baseWon)}원 — <span class="big">${fmtWon(saving)}원 절약</span>`
           + (shortQty > 0 ? `. 단 ${fmtNum(shortQty)}${U} 줄어듭니다.` : '.') + `</div>`;
     const best = dyeBestSplit(rolls, it.rollKg, fee);
     if(best && best.n > 1 && best.won < f.won){
@@ -2058,8 +2056,6 @@ function dyeComboRecalc(c){
       <td>${fmtNum(p.qty)}${p.u}</td>
       <td>${fmtWon(p.share)}</td>
       <td class="hi">${fmtWon(p.per)}원<span style="font-weight:400">/${p.u}</span></td>
-      <td>${p.u === 'yd' ? dash : fmtWon(p.perYd) + '원'}</td>
-      <td style="color:var(--muted)">${fmtWon(p.alonePer)}/${p.u}</td>
     </tr>`).join('');
 
   out.innerHTML = `
@@ -2079,18 +2075,17 @@ function dyeComboRecalc(c){
       <table class="dyetab">
         <thead><tr>
           <th>품목</th><th>출고</th><th>롤</th><th>중량</th><th>수량</th>
-          <th>부담 염색비</th><th>단가</th><th>yd당</th><th>단독 시</th>
+          <th>부담 염색비</th><th>단가</th>
         </tr></thead>
         <tbody>${rows}</tbody>
         <tfoot><tr>
           <td>합계</td><td></td><td>${R.totalRolls}</td><td>${fmtKg(R.totalKg)}</td><td></td>
-          <td>${fmtWon(R.f.won)}</td><td></td><td></td><td>${fmtWon(R.separateWon)}</td>
+          <td>${fmtWon(R.f.won)}</td><td></td>
         </tr></tfoot>
       </table>
     </div>
     <div class="dye-chain">부담 염색비 = 총 염색비 × (그 품목 중량 ÷ 전체 중량) — 중량 비례 배분<br>
-      <span style="opacity:.8">단가 = 부담액 ÷ 출고 수량 — 재단하면 <b>개당</b>, 롤 그대로면 <b>롤당</b>, 테이프는 <b>yd당</b><br>
-      yd당 = 부담액 ÷ 투입 길이 — 출고 형태와 무관해서 품목끼리 비교할 때 씁니다</span></div>`;
+      <span style="opacity:.8">단가 = 부담액 ÷ 출고 수량 — 재단하면 <b>개당</b>, 롤 그대로·테이프는 <b>yd당</b></span></div>`;
 }
 
 function renderDyeTable(){
@@ -2113,7 +2108,7 @@ function renderDyeTable(){
       <td class="em">${fmtNum(pcs)}${u}</td>
       <td>${fmtWon(fee.baseWon)}</td>
       <td class="em">${fmtWon(fee.baseWon/pcs)}<span style="color:var(--muted);font-weight:400">/${u}</span></td>
-      <td>${fmtWon(fee.baseWon/mr)}<span style="color:var(--muted);font-weight:400">/롤</span></td></tr>`;
+      <td>${dyeIsYd(it) ? '<span style="color:var(--muted)">—</span>' : fmtWon(fee.baseWon/(mr*(it.rollYd||200))) + '<span style="color:var(--muted);font-weight:400">/yd</span>'}</td></tr>`;
   }).join('');
   host.innerHTML = `<table class="dyetab">
     <thead><tr>
