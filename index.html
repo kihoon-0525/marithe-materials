@@ -1883,7 +1883,7 @@ function dyeRecalc(){
   }else{
     const saving = f.won - fee.baseWon;
     const shortQty = totalQty - maxRolls * perRoll;
-    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(totalKg - fee.baseKg)}kg 초과</b> → 1kg 단위 올림 <b>${f.over}kg</b> × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(f.won - fee.baseWon)}원</b><br>`
+    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(totalKg - fee.baseKg)}kg 초과</b> → 초과 ${f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(f.won - fee.baseWon)}원</b><br>`
           + `<b>${maxRolls}롤${roll ? '' : `(${fmtNum(maxRolls*perRoll)}${U})`}</b>로 줄이면 ${fmtWon(fee.baseWon)}원 — <span class="big">${fmtWon(saving)}원 절약</span>`
           + (shortQty > 0 ? `. 단 ${fmtNum(shortQty)}${U} 줄어듭니다.` : '.') + `</div>`;
     const best = dyeBestSplit(rolls, it.rollKg, fee);
@@ -2041,7 +2041,7 @@ function dyeComboRecalc(c){
       ? `<div class="dye-tip ok">💡 <b>${fmtKg(room)}kg 여유</b> — 염색비 ${fmtWon(R.f.won)}원 그대로 두고 더 넣을 수 있습니다. 롤 수를 올리거나 다른 품목을 추가해 보세요.</div>`
       : `<div class="dye-tip ok">✅ 기본요금 구간을 꽉 채웠습니다. 단가 최적 상태.</div>`;
   }else{
-    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(R.totalKg - fee.baseKg)}kg 초과</b> → 1kg 단위 올림 <b>${R.f.over}kg</b> × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(R.f.won - fee.baseWon)}원</b>. 롤 수를 줄이면 기본요금 안으로 들어옵니다.</div>`;
+    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(R.totalKg - fee.baseKg)}kg 초과</b> → 초과 ${R.f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(R.f.won - fee.baseWon)}원</b>. 롤 수를 줄이면 기본요금 안으로 들어옵니다.</div>`;
   }
   if(R.parts.length > 1 && R.saving > 0){
     tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
