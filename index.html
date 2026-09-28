@@ -517,13 +517,19 @@
   .dye-seg button{flex:1;padding:9px 4px;background:#fff;border:none;
     font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
   .dye-seg button.on{background:var(--ink);color:#fff}
-  .dye-mrow{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-  .dye-mrow select{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);
+  .dye-mrow{border:1px solid var(--line);border-radius:10px;padding:10px 11px;
+    margin-bottom:9px;background:#fdfdfc}
+  .mr-top{display:flex;align-items:center;gap:8px}
+  .mr-bot{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .dye-mrow select{flex:1;min-width:0;padding:7px 9px;border:1px solid var(--line);
     border-radius:8px;background:#fff;font-size:12.5px;color:var(--ink)}
-  .dye-mrow input[type=number]{width:62px;text-align:right;padding:8px 8px;
+  .dye-mrow input[type=number]{width:58px;text-align:right;padding:6px 8px;
     border:1px solid var(--line);border-radius:8px;font-size:13px;
     font-variant-numeric:tabular-nums}
   .dye-mrow .u{font-size:11.5px;color:var(--muted);flex:none}
+  .dye-mrow .lb{font-size:11.5px;color:var(--muted);flex:none;margin-left:4px}
+  .dye-mrow .mr-qty{margin-left:auto;font-size:12px;font-weight:700;color:#456f2c;
+    font-variant-numeric:tabular-nums;flex:none}
   .dye-mrow .del{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
     background:#fff;color:var(--muted);font-size:13px;line-height:1;padding:0}
   .dye-mrow .del:hover{background:#fdeded;border-color:#f2c9c9;color:#8d2020}
@@ -1683,13 +1689,17 @@ function dyeOptions(items, selIdx){
 /* ===== 조합(여러 품목 한 통에 염색) =====
    염색비는 배치 전체 무게로 매겨지므로, 여러 품목을 같이 넣으면 기본요금을 나눠 쓴다.
    각 품목이 실제로 부담한 금액 = 총 염색비 × (그 품목 중량 / 전체 중량) — 중량 비례 배분. */
-function dyeCombo(rows, c, cutCm){
+function dyeCombo(rows, c, defCut){
   const fee = c.fee;
   const parts = rows.map(r => {
     const it = c.items[r.idx];
     const rolls = Math.max(1, Math.round(r.rolls));
     const kg = kg3(rolls * it.rollKg);
-    return { it, rolls, kg, qty: rolls * dyeQtyPerRoll(it, cutCm), u: dyeU(it) };
+    // 재단길이는 품목마다 다를 수 있다 (같은 통에 넣어도 자르는 길이는 제각각)
+    const cut = dyeIsYd(it) ? null : (r.cut > 0 ? r.cut : defCut);
+    const yd  = rolls * (it.rollYd || 200);
+    return { it, rolls, kg, cut, yd,
+             qty: rolls * dyeQtyPerRoll(it, cut || defCut), u: dyeU(it) };
   });
   const totalKg = kg3(parts.reduce((s,p) => s + p.kg, 0));
   const totalRolls = parts.reduce((s,p) => s + p.rolls, 0);
@@ -1701,7 +1711,8 @@ function dyeCombo(rows, c, cutCm){
     p.share = (i === parts.length - 1) ? f.won - acc
             : (totalKg > 0 ? Math.round(f.won * p.kg / totalKg) : 0);
     acc += p.share;
-    p.per = p.qty > 0 ? p.share / p.qty : 0;
+    p.per   = p.qty > 0 ? p.share / p.qty : 0;   // 개당(또는 yd당) — 품목 기본 단위
+    p.perYd = p.yd  > 0 ? p.share / p.yd  : 0;   // yd당 — 단위 무관 비교용
     // 같은 수량을 이 품목만 따로 염색했다면?
     const alone = dyeFee(p.kg, fee);
     p.aloneWon = alone.won;
@@ -1882,16 +1893,28 @@ function dyeRecalc(){
 function renderDyeCombo(c){
   const fee = c.fee;
   const cutCm = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
-  const anyPcs = dyeUI.rows.some(r => !dyeIsYd(c.items[r.idx]));
   infoEl.textContent = `여러 품목을 한 통에 같이 염색 — 기본요금 ${fmtWon(fee.baseWon)}원 / ${fee.baseKg}kg 를 나눠 씁니다`;
 
-  const rowsHtml = dyeUI.rows.map((r,i) => `
+  const rowsHtml = dyeUI.rows.map((r,i) => {
+    const it = c.items[r.idx], isYd = dyeIsYd(it);
+    const rolls = Math.max(1, Math.round(r.rolls));
+    const cut = r.cut > 0 ? r.cut : cutCm;
+    const qty = rolls * dyeQtyPerRoll(it, cut);
+    return `
     <div class="dye-mrow" data-i="${i}">
-      <select data-role="item">${dyeOptions(c.items, r.idx)}</select>
-      <input type="number" data-role="rolls" min="1" step="1" value="${Math.max(1,Math.round(r.rolls))}">
-      <span class="u">롤</span>
-      <button type="button" class="del" data-role="del" title="이 품목 빼기"${dyeUI.rows.length<=1?' disabled':''}>✕</button>
-    </div>`).join('');
+      <div class="mr-top">
+        <select data-role="item">${dyeOptions(c.items, r.idx)}</select>
+        <button type="button" class="del" data-role="del" title="이 품목 빼기"${dyeUI.rows.length<=1?' disabled':''}>✕</button>
+      </div>
+      <div class="mr-bot">
+        <input type="number" data-role="rolls" min="1" step="1" value="${rolls}"><span class="u">롤</span>
+        ${isYd
+          ? `<span class="lb">· 재단 없이 길이 그대로</span>`
+          : `<span class="lb">· 재단</span><input type="number" data-role="cut" min="1" step="1" value="${cut}"><span class="u">cm</span>`}
+        <span class="mr-qty">${fmtNum(qty)}${dyeU(it)}</span>
+      </div>
+    </div>`;
+  }).join('');
 
   gridEl.innerHTML = `
   <div class="dye-wrap">
@@ -1904,10 +1927,7 @@ function renderDyeCombo(c){
         </div>
         ${rowsHtml}
         <button type="button" class="dye-add" id="dye-add"${dyeUI.rows.length>=c.items.length?' disabled':''}>＋ 품목 추가</button>
-        ${anyPcs ? `<hr class="dye-sep">
-        <div class="dye-row"><label>재단길이</label>
-          <input type="number" id="dye-cut" min="1" step="1" value="${cutCm}"><span class="u">cm / 1개</span></div>` : ''}
-        <div class="dye-row"><span class="hint">한 통에 같이 넣는 품목들입니다. 염색비는 전체 무게로 매겨지고, 각 품목 부담액은 중량 비례로 나눕니다</span></div>
+        <div class="dye-row" style="margin-top:12px"><span class="hint">한 통에 같이 넣는 품목들입니다. 재단길이는 품목마다 따로 잡을 수 있고, 염색비는 전체 무게로 매겨진 뒤 중량 비례로 나뉩니다</span></div>
       </section>
       <section class="dye-card" id="dye-out"></section>
     </div>
@@ -1933,7 +1953,13 @@ function renderDyeCombo(c){
     row.querySelector('[data-role=rolls]').addEventListener('input', e => {
       const v = parseInt(e.target.value, 10);
       dyeUI.rows[i].rolls = (isFinite(v) && v >= 1) ? v : 1;
-      dyeComboRecalc(c);
+      dyeComboRecalc(c); dyeSyncRowQty(c);
+    });
+    const cutEl = row.querySelector('[data-role=cut]');
+    if(cutEl) cutEl.addEventListener('input', e => {
+      const v = parseFloat(e.target.value);
+      dyeUI.rows[i].cut = (isFinite(v) && v >= 1) ? v : (dyeUI.cutCm || c.def.cutCm);
+      dyeComboRecalc(c); dyeSyncRowQty(c);
     });
     row.querySelector('[data-role=del]').addEventListener('click', () => {
       if(dyeUI.rows.length <= 1) return;
@@ -1948,15 +1974,20 @@ function renderDyeCombo(c){
     dyeUI.rows.push({ idx: next, rolls: 1 });
     renderDyeCombo(c);
   });
-  const cut = gridEl.querySelector('#dye-cut');
-  if(cut) cut.addEventListener('input', () => {
-    const v = parseFloat(cut.value);
-    dyeUI.cutCm = (isFinite(v) && v >= 1) ? v : c.def.cutCm;
-    dyeComboRecalc(c);
-  });
-
   dyeComboRecalc(c);
   renderDyeTable();
+}
+
+/* 입력 중에는 행 전체를 다시 그리지 않고(포커스 유지) 수량 배지만 갱신 */
+function dyeSyncRowQty(c){
+  const defCut = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+  gridEl.querySelectorAll('.dye-mrow').forEach(row => {
+    const r = dyeUI.rows[+row.dataset.i]; if(!r) return;
+    const it = c.items[r.idx];
+    const qty = Math.max(1, Math.round(r.rolls)) * dyeQtyPerRoll(it, r.cut > 0 ? r.cut : defCut);
+    const el = row.querySelector('.mr-qty');
+    if(el) el.textContent = fmtNum(qty) + dyeU(it);
+  });
 }
 
 function dyeComboRecalc(c){
@@ -1976,20 +2007,31 @@ function dyeComboRecalc(c){
   }else{
     tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(R.totalKg - fee.baseKg)}kg 초과</b> → 초과 ${R.f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(R.f.won - fee.baseWon)}원</b>. 롤 수를 줄이면 기본요금 안으로 들어옵니다.</div>`;
   }
-  if(R.parts.length > 1 && R.saving > 0){
-    tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
-          + `따로따로 ${R.parts.length}번 보내면 ${fmtWon(R.separateWon)}원, 한 통에 합치면 <span class="big">${fmtWon(R.f.won)}원</span><br>`
-          + `<span style="opacity:.75">${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액이라, 나눠 보낼수록 기본요금을 그만큼 더 내게 됩니다.</span></div>`;
+  if(R.parts.length > 1){
+    if(R.saving > 0){
+      tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
+            + `따로따로 ${R.parts.length}번 보내면 ${fmtWon(R.separateWon)}원, 한 통에 합치면 <span class="big">${fmtWon(R.f.won)}원</span><br>`
+            + `<span style="opacity:.75">${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액이라, 나눠 보낼수록 기본요금을 그만큼 더 내게 됩니다.</span></div>`;
+    }else if(R.saving < 0){
+      // 물량이 많으면 합치는 게 손해다 — 초과단가가 기본단가보다 비싸기 때문
+      tips += `<div class="dye-tip warn">🚫 <b>이 조합은 합치면 ${fmtWon(-R.saving)}원 손해</b> — `
+            + `한 통에 합치면 ${fmtWon(R.f.won)}원인데, 따로따로 ${R.parts.length}번 보내면 <span class="big">${fmtWon(R.separateWon)}원</span><br>`
+            + `<span style="opacity:.75">초과분은 kg당 ${fmtWon(fee.overWonPerKg)}원인데 기본요금은 kg당 ${fmtWon(fee.baseWon/fee.baseKg)}원꼴이라, `
+            + `${fee.baseKg}kg를 많이 넘기면 나눠 보내는 쪽이 쌉니다. 품목을 나눠서 의뢰하세요.</span></div>`;
+    }
   }
 
+  const dash = '<span style="color:var(--muted)">—</span>';
   const rows = R.parts.map(p => `<tr class="static">
       <td>${escapeHtml(p.it.name)}</td>
       <td>${p.rolls}</td>
       <td>${fmtKg(p.kg)}</td>
+      <td>${p.cut ? p.cut + 'cm' : dash}</td>
       <td>${fmtNum(p.qty)}${p.u}</td>
       <td>${fmtWon(p.share)}</td>
-      <td class="hi">${fmtWon(p.per)}<span style="color:#6b8a52;font-weight:400">/${p.u}</span></td>
-      <td style="color:var(--muted)">${fmtWon(p.alonePer)}/${p.u}</td>
+      <td class="${p.u === '개' ? 'hi' : ''}">${p.u === '개' ? fmtWon(p.per) + '원' : dash}</td>
+      <td class="${p.u === 'yd' ? 'hi' : ''}">${fmtWon(p.perYd)}원</td>
+      <td style="color:${p.per > p.alonePer + 1e-9 ? '#8d2020' : 'var(--muted)'}">${fmtWon(p.alonePer)}/${p.u}${p.per > p.alonePer + 1e-9 ? ' ↓' : ''}</td>
     </tr>`).join('');
 
   out.innerHTML = `
@@ -2008,17 +2050,18 @@ function dyeComboRecalc(c){
     <div class="dye-scroll" style="margin-top:14px">
       <table class="dyetab">
         <thead><tr>
-          <th>품목</th><th>롤</th><th>중량</th><th>수량</th>
-          <th>부담 염색비</th><th>단가</th><th>단독 시 단가</th>
+          <th>품목</th><th>롤</th><th>중량</th><th>재단길이</th><th>수량</th>
+          <th>부담 염색비</th><th>개당</th><th>yd당</th><th>단독 시</th>
         </tr></thead>
         <tbody>${rows}</tbody>
         <tfoot><tr>
-          <td>합계</td><td>${R.totalRolls}</td><td>${fmtKg(R.totalKg)}</td><td></td>
-          <td>${fmtWon(R.f.won)}</td><td></td><td>${fmtWon(R.separateWon)}</td>
+          <td>합계</td><td>${R.totalRolls}</td><td>${fmtKg(R.totalKg)}</td><td></td><td></td>
+          <td>${fmtWon(R.f.won)}</td><td></td><td></td><td>${fmtWon(R.separateWon)}</td>
         </tr></tfoot>
       </table>
     </div>
-    <div class="dye-chain">부담 염색비 = 총 염색비 × (그 품목 중량 ÷ 전체 중량) — 중량 비례 배분</div>`;
+    <div class="dye-chain">부담 염색비 = 총 염색비 × (그 품목 중량 ÷ 전체 중량) — 중량 비례 배분<br>
+      <span style="opacity:.8">개당 = 부담액 ÷ 그 품목 수량 (재단길이에 따라 달라짐) · yd당 = 부담액 ÷ 그 품목 투입 길이 (재단과 무관)</span></div>`;
 }
 
 function renderDyeTable(){
