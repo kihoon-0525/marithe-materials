@@ -2007,18 +2007,10 @@ function dyeComboRecalc(c){
   }else{
     tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(R.totalKg - fee.baseKg)}kg 초과</b> → 초과 ${R.f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(R.f.won - fee.baseWon)}원</b>. 롤 수를 줄이면 기본요금 안으로 들어옵니다.</div>`;
   }
-  if(R.parts.length > 1){
-    if(R.saving > 0){
-      tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
-            + `따로따로 ${R.parts.length}번 보내면 ${fmtWon(R.separateWon)}원, 한 통에 합치면 <span class="big">${fmtWon(R.f.won)}원</span><br>`
-            + `<span style="opacity:.75">${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액이라, 나눠 보낼수록 기본요금을 그만큼 더 내게 됩니다.</span></div>`;
-    }else if(R.saving < 0){
-      // 물량이 많으면 합치는 게 손해다 — 초과단가가 기본단가보다 비싸기 때문
-      tips += `<div class="dye-tip warn">🚫 <b>이 조합은 합치면 ${fmtWon(-R.saving)}원 손해</b> — `
-            + `한 통에 합치면 ${fmtWon(R.f.won)}원인데, 따로따로 ${R.parts.length}번 보내면 <span class="big">${fmtWon(R.separateWon)}원</span><br>`
-            + `<span style="opacity:.75">초과분은 kg당 ${fmtWon(fee.overWonPerKg)}원인데 기본요금은 kg당 ${fmtWon(fee.baseWon/fee.baseKg)}원꼴이라, `
-            + `${fee.baseKg}kg를 많이 넘기면 나눠 보내는 쪽이 쌉니다. 품목을 나눠서 의뢰하세요.</span></div>`;
-    }
+  if(R.parts.length > 1 && R.saving > 0){
+    tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
+          + `따로따로 ${R.parts.length}번 보내면 ${fmtWon(R.separateWon)}원, 한 통에 합치면 <span class="big">${fmtWon(R.f.won)}원</span><br>`
+          + `<span style="opacity:.75">${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액이라, 나눠 보낼수록 기본요금을 그만큼 더 내게 됩니다.</span></div>`;
   }
 
   const dash = '<span style="color:var(--muted)">—</span>';
@@ -2031,7 +2023,7 @@ function dyeComboRecalc(c){
       <td>${fmtWon(p.share)}</td>
       <td class="${p.u === '개' ? 'hi' : ''}">${p.u === '개' ? fmtWon(p.per) + '원' : dash}</td>
       <td class="${p.u === 'yd' ? 'hi' : ''}">${fmtWon(p.perYd)}원</td>
-      <td style="color:${p.per > p.alonePer + 1e-9 ? '#8d2020' : 'var(--muted)'}">${fmtWon(p.alonePer)}/${p.u}${p.per > p.alonePer + 1e-9 ? ' ↓' : ''}</td>
+      <td style="color:var(--muted)">${fmtWon(p.alonePer)}/${p.u}</td>
     </tr>`).join('');
 
   out.innerHTML = `
