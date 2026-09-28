@@ -512,6 +512,29 @@
   details.dye-fold > summary em{font-style:normal;color:var(--ink);letter-spacing:.02em;font-weight:700}
   details.dye-fold[open] > summary{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
   .dye-foot{font-size:12px;color:var(--muted);line-height:1.7;text-align:center;padding:0 4px 4px}
+  /* 조합 모드 */
+  .dye-seg{display:flex;margin:0 0 16px;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .dye-seg button{flex:1;padding:9px 4px;background:#fff;border:none;
+    font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+  .dye-seg button.on{background:var(--ink);color:#fff}
+  .dye-mrow{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .dye-mrow select{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);
+    border-radius:8px;background:#fff;font-size:12.5px;color:var(--ink)}
+  .dye-mrow input[type=number]{width:62px;text-align:right;padding:8px 8px;
+    border:1px solid var(--line);border-radius:8px;font-size:13px;
+    font-variant-numeric:tabular-nums}
+  .dye-mrow .u{font-size:11.5px;color:var(--muted);flex:none}
+  .dye-mrow .del{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+    background:#fff;color:var(--muted);font-size:13px;line-height:1;padding:0}
+  .dye-mrow .del:hover{background:#fdeded;border-color:#f2c9c9;color:#8d2020}
+  .dye-mrow .del[disabled]{opacity:.3;cursor:default}
+  .dye-add{width:100%;padding:9px;border:1px dashed var(--line);border-radius:8px;
+    background:#fff;color:var(--muted);font-size:12.5px;font-weight:600;margin-top:2px}
+  .dye-add:hover{border-color:var(--ink);color:var(--ink)}
+  .dye-add[disabled]{opacity:.4;cursor:default}
+  table.dyetab td.hi{background:#eff6e9;font-weight:700;color:#33571f}
+  table.dyetab tfoot td{border-top:2px solid var(--line);font-weight:800;background:#faf9f5}
+  table.dyetab tbody tr.static{cursor:default}
   .dye-scroll{overflow-x:auto;margin:0 -4px}
   table.dyetab{border-collapse:collapse;width:100%;font-size:12.5px;
     font-variant-numeric:tabular-nums}
@@ -1647,13 +1670,45 @@ function dyeBestSplit(rolls, rollKg, fee){
 }
 
 /* 품목 드롭다운 — 단위별로 묶어서 표시 */
-function dyeOptions(items){
-  const opt = (x,i) => `<option value="${i}"${i===dyeUI.idx?' selected':''}>${escapeHtml(x.name)} — ${fmtKg(x.rollKg)}kg/롤</option>`;
+function dyeOptions(items, selIdx){
+  const sel = (selIdx === undefined) ? dyeUI.idx : selIdx;
+  const opt = (x,i) => `<option value="${i}"${i===sel?' selected':''}>${escapeHtml(x.name)} — ${fmtKg(x.rollKg)}kg/롤</option>`;
   const pcs = [], yd = [];
   items.forEach((x,i) => (dyeIsYd(x) ? yd : pcs).push(opt(x,i)));
   if(!pcs.length || !yd.length) return pcs.concat(yd).join('');
   return `<optgroup label="스트링 · 개 단위">${pcs.join('')}</optgroup>`
        + `<optgroup label="헤링본 테이프 · yd 단위">${yd.join('')}</optgroup>`;
+}
+
+/* ===== 조합(여러 품목 한 통에 염색) =====
+   염색비는 배치 전체 무게로 매겨지므로, 여러 품목을 같이 넣으면 기본요금을 나눠 쓴다.
+   각 품목이 실제로 부담한 금액 = 총 염색비 × (그 품목 중량 / 전체 중량) — 중량 비례 배분. */
+function dyeCombo(rows, c, cutCm){
+  const fee = c.fee;
+  const parts = rows.map(r => {
+    const it = c.items[r.idx];
+    const rolls = Math.max(1, Math.round(r.rolls));
+    const kg = kg3(rolls * it.rollKg);
+    return { it, rolls, kg, qty: rolls * dyeQtyPerRoll(it, cutCm), u: dyeU(it) };
+  });
+  const totalKg = kg3(parts.reduce((s,p) => s + p.kg, 0));
+  const totalRolls = parts.reduce((s,p) => s + p.rolls, 0);
+  const f = dyeFee(totalKg, fee);
+
+  // 중량 비례 배분 (반올림 잔액은 마지막 항목이 흡수 — 합계가 총액과 정확히 일치하도록)
+  let acc = 0;
+  parts.forEach((p,i) => {
+    p.share = (i === parts.length - 1) ? f.won - acc
+            : (totalKg > 0 ? Math.round(f.won * p.kg / totalKg) : 0);
+    acc += p.share;
+    p.per = p.qty > 0 ? p.share / p.qty : 0;
+    // 같은 수량을 이 품목만 따로 염색했다면?
+    const alone = dyeFee(p.kg, fee);
+    p.aloneWon = alone.won;
+    p.alonePer = p.qty > 0 ? alone.won / p.qty : 0;
+  });
+  const separateWon = parts.reduce((s,p) => s + p.aloneWon, 0);
+  return { parts, totalKg, totalRolls, f, separateWon, saving: separateWon - f.won };
 }
 
 function renderDyeCalc(){
@@ -1665,8 +1720,16 @@ function renderDyeCalc(){
     return;
   }
   if(!dyeUI) dyeUI = { idx:0, mode:'pcs', rolls:dyeMaxRolls(c.items[0].rollKg, c.fee),
-                       pcs:1000, cutCm:c.def.cutCm, tableOpen:false };
+                       pcs:1000, cutCm:c.def.cutCm, tableOpen:false,
+                       multi:false, rows:null };
   if(dyeUI.idx >= c.items.length) dyeUI.idx = 0;
+  if(!dyeUI.rows) dyeUI.rows = [
+    { idx:0, rolls:Math.max(1, Math.floor(dyeMaxRolls(c.items[0].rollKg, c.fee)/2)) },
+    { idx:Math.min(1, c.items.length-1), rolls:Math.max(1, Math.floor(dyeMaxRolls(c.items[Math.min(1,c.items.length-1)].rollKg, c.fee)/2)) },
+  ];
+  dyeUI.rows = dyeUI.rows.filter(r => r.idx < c.items.length);
+  if(!dyeUI.rows.length) dyeUI.rows = [{ idx:0, rolls:1 }];
+  if(dyeUI.multi) return renderDyeCombo(c);
   const it = c.items[dyeUI.idx], rollYd = it.rollYd || 200;
   const isYd = dyeIsYd(it), U = dyeU(it);
   infoEl.textContent = `1롤 ${rollYd}yd 고정 · 염색 ${fmtWon(c.fee.baseWon)}원 / ${c.fee.baseKg}kg · 초과 kg당 ${fmtWon(c.fee.overWonPerKg)}원`;
@@ -1676,6 +1739,10 @@ function renderDyeCalc(){
     <div class="dye-top">
       <section class="dye-card">
         <h3>① 입력</h3>
+        <div class="dye-seg">
+          <button type="button" data-multi="0" class="on">단일 품목</button>
+          <button type="button" data-multi="1">여러 품목 조합</button>
+        </div>
         <div class="dye-row"><label>품목</label>
           <select id="dye-item">${dyeOptions(c.items)}</select></div>
         <div class="dye-mode">
@@ -1710,6 +1777,8 @@ function renderDyeCalc(){
   sel.addEventListener('change', () => { dyeUI.idx = +sel.value; renderDyeCalc(); });
   gridEl.querySelectorAll('.dye-mode button').forEach(b =>
     b.addEventListener('click', () => { dyeUI.mode = b.dataset.mode; renderDyeCalc(); }));
+  gridEl.querySelectorAll('.dye-seg button').forEach(b =>
+    b.addEventListener('click', () => { dyeUI.multi = b.dataset.multi === '1'; renderDyeCalc(); }));
   const bindNum = (id, key, min, fb) => {
     const el = gridEl.querySelector(id); if(!el) return;
     el.addEventListener('input', () => {
@@ -1810,6 +1879,148 @@ function dyeRecalc(){
     <div class="dye-chain">${chain}</div>`;
 }
 
+function renderDyeCombo(c){
+  const fee = c.fee;
+  const cutCm = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+  const anyPcs = dyeUI.rows.some(r => !dyeIsYd(c.items[r.idx]));
+  infoEl.textContent = `여러 품목을 한 통에 같이 염색 — 기본요금 ${fmtWon(fee.baseWon)}원 / ${fee.baseKg}kg 를 나눠 씁니다`;
+
+  const rowsHtml = dyeUI.rows.map((r,i) => `
+    <div class="dye-mrow" data-i="${i}">
+      <select data-role="item">${dyeOptions(c.items, r.idx)}</select>
+      <input type="number" data-role="rolls" min="1" step="1" value="${Math.max(1,Math.round(r.rolls))}">
+      <span class="u">롤</span>
+      <button type="button" class="del" data-role="del" title="이 품목 빼기"${dyeUI.rows.length<=1?' disabled':''}>✕</button>
+    </div>`).join('');
+
+  gridEl.innerHTML = `
+  <div class="dye-wrap">
+    <div class="dye-top">
+      <section class="dye-card">
+        <h3>① 입력</h3>
+        <div class="dye-seg">
+          <button type="button" data-multi="0">단일 품목</button>
+          <button type="button" data-multi="1" class="on">여러 품목 조합</button>
+        </div>
+        ${rowsHtml}
+        <button type="button" class="dye-add" id="dye-add"${dyeUI.rows.length>=c.items.length?' disabled':''}>＋ 품목 추가</button>
+        ${anyPcs ? `<hr class="dye-sep">
+        <div class="dye-row"><label>재단길이</label>
+          <input type="number" id="dye-cut" min="1" step="1" value="${cutCm}"><span class="u">cm / 1개</span></div>` : ''}
+        <div class="dye-row"><span class="hint">한 통에 같이 넣는 품목들입니다. 염색비는 전체 무게로 매겨지고, 각 품목 부담액은 중량 비례로 나눕니다</span></div>
+      </section>
+      <section class="dye-card" id="dye-out"></section>
+    </div>
+    <section class="dye-card">
+      <details class="dye-fold" id="dye-fold"${dyeUI.tableOpen ? ' open' : ''}>
+        <summary>③ 품목별 기준표 — <em>기본요금 ${fmtWon(fee.baseWon)}원으로 뽑을 수 있는 최대치</em></summary>
+        <div class="dye-scroll" id="dye-table"></div>
+      </details>
+    </section>
+    <div class="dye-foot">※ 염색비 추가금액 확인을 위한 계산기입니다. 실제 작업 현장에서는 수량에 다소 차이가 발생할 수 있습니다.</div>
+  </div>`;
+
+  const fold = gridEl.querySelector('#dye-fold');
+  if(fold) fold.addEventListener('toggle', () => { dyeUI.tableOpen = fold.open; });
+  gridEl.querySelectorAll('.dye-seg button').forEach(b =>
+    b.addEventListener('click', () => { dyeUI.multi = b.dataset.multi === '1'; renderDyeCalc(); }));
+
+  gridEl.querySelectorAll('.dye-mrow').forEach(row => {
+    const i = +row.dataset.i;
+    row.querySelector('[data-role=item]').addEventListener('change', e => {
+      dyeUI.rows[i].idx = +e.target.value; renderDyeCombo(c);
+    });
+    row.querySelector('[data-role=rolls]').addEventListener('input', e => {
+      const v = parseInt(e.target.value, 10);
+      dyeUI.rows[i].rolls = (isFinite(v) && v >= 1) ? v : 1;
+      dyeComboRecalc(c);
+    });
+    row.querySelector('[data-role=del]').addEventListener('click', () => {
+      if(dyeUI.rows.length <= 1) return;
+      dyeUI.rows.splice(i,1); renderDyeCombo(c);
+    });
+  });
+  const add = gridEl.querySelector('#dye-add');
+  if(add) add.addEventListener('click', () => {
+    const used = new Set(dyeUI.rows.map(r => r.idx));
+    const next = c.items.findIndex((_,i) => !used.has(i));
+    if(next < 0) return;
+    dyeUI.rows.push({ idx: next, rolls: 1 });
+    renderDyeCombo(c);
+  });
+  const cut = gridEl.querySelector('#dye-cut');
+  if(cut) cut.addEventListener('input', () => {
+    const v = parseFloat(cut.value);
+    dyeUI.cutCm = (isFinite(v) && v >= 1) ? v : c.def.cutCm;
+    dyeComboRecalc(c);
+  });
+
+  dyeComboRecalc(c);
+  renderDyeTable();
+}
+
+function dyeComboRecalc(c){
+  const out = gridEl.querySelector('#dye-out'); if(!out) return;
+  const fee = c.fee;
+  const cutCm = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+  const R = dyeCombo(dyeUI.rows, c, cutCm);
+  const pct = Math.min(100, R.totalKg / fee.baseKg * 100);
+  const over = R.totalKg > fee.baseKg;
+
+  let tips = '';
+  if(!over){
+    const room = kg3(fee.baseKg - R.totalKg);
+    tips += room >= 0.05
+      ? `<div class="dye-tip ok">💡 <b>${fmtKg(room)}kg 여유</b> — 염색비 ${fmtWon(R.f.won)}원 그대로 두고 더 넣을 수 있습니다. 롤 수를 올리거나 다른 품목을 추가해 보세요.</div>`
+      : `<div class="dye-tip ok">✅ 기본요금 구간을 꽉 채웠습니다. 단가 최적 상태.</div>`;
+  }else{
+    tips += `<div class="dye-tip warn">⚠️ ${fee.baseKg}kg를 <b>${fmtKg(R.totalKg - fee.baseKg)}kg 초과</b> → 초과 ${R.f.over}kg × ${fmtWon(fee.overWonPerKg)}원 = <b>+${fmtWon(R.f.won - fee.baseWon)}원</b>. 롤 수를 줄이면 기본요금 안으로 들어옵니다.</div>`;
+  }
+  if(R.parts.length > 1 && R.saving > 0){
+    tips += `<div class="dye-tip info">📦 <b>같이 보내서 ${fmtWon(R.saving)}원 절약</b> — `
+          + `따로따로 ${R.parts.length}번 보내면 ${fmtWon(R.separateWon)}원, 한 통에 합치면 <span class="big">${fmtWon(R.f.won)}원</span><br>`
+          + `<span style="opacity:.75">${fee.baseKg}kg까지 ${fmtWon(fee.baseWon)}원 정액이라, 나눠 보낼수록 기본요금을 그만큼 더 내게 됩니다.</span></div>`;
+  }
+
+  const rows = R.parts.map(p => `<tr class="static">
+      <td>${escapeHtml(p.it.name)}</td>
+      <td>${p.rolls}</td>
+      <td>${fmtKg(p.kg)}</td>
+      <td>${fmtNum(p.qty)}${p.u}</td>
+      <td>${fmtWon(p.share)}</td>
+      <td class="hi">${fmtWon(p.per)}<span style="color:#6b8a52;font-weight:400">/${p.u}</span></td>
+      <td style="color:var(--muted)">${fmtWon(p.alonePer)}/${p.u}</td>
+    </tr>`).join('');
+
+  out.innerHTML = `
+    <h3>② 결과 — <em>${R.parts.length}개 품목 한 통</em></h3>
+    <div class="dye-kpi">
+      <div><div class="k">총 투입 롤</div><div class="v">${fmtNum(R.totalRolls)}<s>롤</s></div></div>
+      <div><div class="k">총 투입 중량</div><div class="v">${fmtKg(R.totalKg)}<s>kg</s></div></div>
+      <div><div class="k">청구 중량</div><div class="v">${R.f.billKg}<s>kg</s></div></div>
+      <div class="big"><div class="k">염색비 합계</div><div class="v">${fmtWon(R.f.won)}<s>원</s></div></div>
+    </div>
+    <div class="dye-gauge-wrap">
+      <div class="dye-gauge"><i style="width:${pct}%;background:${over?'#c0392b':(pct>85?'#5b8a3c':'#8fae6e')}"></i></div>
+      <div class="dye-gauge-lbl"><span>${fmtKg(R.totalKg)}kg 투입</span><span>기본요금 한도 ${fee.baseKg}kg</span></div>
+    </div>
+    ${tips}
+    <div class="dye-scroll" style="margin-top:14px">
+      <table class="dyetab">
+        <thead><tr>
+          <th>품목</th><th>롤</th><th>중량</th><th>수량</th>
+          <th>부담 염색비</th><th>단가</th><th>단독 시 단가</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr>
+          <td>합계</td><td>${R.totalRolls}</td><td>${fmtKg(R.totalKg)}</td><td></td>
+          <td>${fmtWon(R.f.won)}</td><td></td><td>${fmtWon(R.separateWon)}</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="dye-chain">부담 염색비 = 총 염색비 × (그 품목 중량 ÷ 전체 중량) — 중량 비례 배분</div>`;
+}
+
 function renderDyeTable(){
   const host = gridEl.querySelector('#dye-table'); if(!host) return;
   const c = dyeCfg(), fee = c.fee;
@@ -1820,7 +2031,8 @@ function renderDyeTable(){
     const mr  = dyeMaxRolls(it.rollKg, fee);
     const kg  = kg3(mr * it.rollKg);
     const pcs = mr * per;
-    return `<tr data-i="${i}"${i===dyeUI.idx?' class="sel"':''}>
+    const on = dyeUI.multi ? dyeUI.rows.some(r => r.idx === i) : (i === dyeUI.idx);
+    return `<tr data-i="${i}"${on?' class="sel"':''}>
       <td>${escapeHtml(it.name)}</td>
       <td>${fmtKg(it.rollKg)}</td>
       <td>${fmtNum(per)}${u}</td>
@@ -1836,9 +2048,22 @@ function renderDyeTable(){
       <th>투입 중량</th><th>총 수량</th><th>염색비</th><th>단가</th>
     </tr></thead><tbody>${rows}</tbody></table>
     <div class="dye-row" style="margin:12px 0 0"><span class="hint" style="margin:0">
-      재단길이 ${cutCm}cm 기준 (yd 품목은 재단 없이 길이로 계산) · 행을 클릭하면 그 조건으로 계산합니다</span></div>`;
+      재단길이 ${cutCm}cm 기준 (yd 품목은 재단 없이 길이로 계산) · 행을 클릭하면 ${dyeUI.multi ? '조합에 넣거나 뺍니다' : '그 조건으로 계산합니다'}</span></div>`;
   host.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
     const i = +tr.dataset.i;
+    if(dyeUI.multi){
+      // 조합 모드: 이미 담긴 품목이면 빼고, 아니면 기본요금을 넘지 않는 선에서 넣는다
+      const at = dyeUI.rows.findIndex(r => r.idx === i);
+      if(at >= 0){ if(dyeUI.rows.length > 1) dyeUI.rows.splice(at,1); }
+      else {
+        const cut = dyeUI.cutCm > 0 ? dyeUI.cutCm : c.def.cutCm;
+        const usedKg = dyeCombo(dyeUI.rows, c, cut).totalKg;
+        const room = fee.baseKg - usedKg;
+        dyeUI.rows.push({ idx:i, rolls: Math.max(1, Math.floor(kg3(room / c.items[i].rollKg) + 1e-9)) });
+      }
+      renderDyeCombo(c);
+      return;
+    }
     dyeUI.idx = i;
     dyeUI.mode = 'rolls';
     dyeUI.rolls = dyeMaxRolls(c.items[i].rollKg, fee);
