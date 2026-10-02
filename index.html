@@ -48,8 +48,9 @@
     display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
   }
   .brand{
-    display:flex;align-items:baseline;gap:14px;
+    display:flex;align-items:baseline;gap:14px;cursor:pointer;user-select:none;
   }
+  .brand:hover .logo{opacity:.7}
   .brand .logo{
     font-size:26px;font-weight:800;letter-spacing:.06em;
   }
@@ -568,7 +569,7 @@
 
 <header class="brand-bar">
   <div class="bar-row">
-    <div class="brand">
+    <div class="brand" id="brand-home" role="link" tabindex="0" title="처음 화면으로">
       <div class="logo">MARITHÉ FRANÇOIS GIRBAUD</div>
       <div class="sub">Material List -SNS-</div>
     </div>
@@ -1558,6 +1559,17 @@ $('#btn-excel').addEventListener('click', () => {
 
 /* ====== SEARCH ====== */
 searchEl.addEventListener('input', renderGrid);
+
+/* 로고 클릭 → 처음 화면(첫 탭, 검색 초기화, 맨 위) */
+function goHome(){
+  currentTab = CATEGORIES[0]; currentFolder = null;
+  searchEl.value = '';
+  renderTabs(); renderGrid(); updateSaveBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const brandEl = $('#brand-home');
+brandEl.addEventListener('click', goHome);
+brandEl.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goHome(); } });
 
 /* ====== LIGHTBOX ====== */
 const lightbox = $('#lightbox');
